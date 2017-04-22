@@ -28,6 +28,11 @@ public:
 	// Initialize the square (side is already defined)
 	Fruit(double x, double y, double r, double g, double b) 
 	{
+		fruit = Square(x, y);
+		this -> r = r;
+		this -> g = g;
+		this-> b = b;
+
 		// code here...	
 	}
 
@@ -36,7 +41,7 @@ public:
 	// Draw the fruit (just call the square's draw function)
 	void draw()
 	{
-		// code here...	
+		fruit.draw(r,g,b);
 	}
 };
 
