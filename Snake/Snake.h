@@ -9,6 +9,7 @@
 
 #include "Square.h"
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -27,17 +28,27 @@ public:
 	// Constructor:
 
 	// Insert a square into the vector (Represents the head).
+	// Also insert tail and body in the middle;
 	// The square (with side length 0.1) should be at the starting position.
 	// Default color for snake would be white (1.0, 1.0, 1.0)
-	Snake() 
+	Snake()
 	{
 		// code here...
+		r = 1.0;
+		g = 1.0;
+		b = 1.0;
+		snake.push_back(Square());
+		snake.push_back(Square(0.0,-0.1));
+		snake.push_back(Square(0.0, -0.2));
 	}
 
 	// Same except that color is specified
 	Snake(double r, double g, double b)
 	{
 		// code here...
+		this->r = r;
+		this->g = g;
+		this->b = b;
 	}
 
 	// Public methods:
@@ -49,6 +60,57 @@ public:
 	void grow()
 	{
 		// code here...
+		double lastX;
+		double lastY;
+		double slastX;
+		double slastY;
+		double xOffset;
+		double yOffset;
+		double x;
+		double y;
+
+		snake[snake.size() - 1].getLocation(lastX, lastY);
+		snake[snake.size() - 2].getLocation(slastX, slastY);
+		x = lastX;
+		y = lastY;
+
+		// decide what direction location should be shifted towards based on what current direction the last tail is currently in
+
+		xOffset = slastX - lastX;
+		yOffset = slastY - lastY;
+
+		if (xOffset > 0)
+			x -= 0.1;
+		else if (xOffset < 0)
+			x += 0.1;
+		else if (yOffset > 0)
+			y -= 0.1;
+		else if (yOffset < 0)
+			y += 0.1;
+		
+		if (x >= 1.0)
+		{
+			x -= 0.1;
+			y -= 0.1;
+		}
+		else if (x <= -1)
+		{
+			x += 0.1;
+			y -= 0.1;
+		}
+
+		if (y >= 1.0)
+		{
+			x -= 0.1;
+			y -= 0.1;
+		}
+		else if (y <= -1)
+		{
+			x += 0.1;
+			y += 0.1;
+		}
+		// check if location is valid first before putting in
+		snake.push_back(Square(x, y));
 	}
 
 	// Move the snake by 0.1 in a specified direction...
@@ -61,6 +123,36 @@ public:
 	void move(Direction direction)
 	{
 		// code here...
+		Direction myDirection = direction;
+		double cX;
+		double cY;
+		double nX;
+		double nY;
+		double xOffset;
+		double yOffset;
+
+		for (int i = 0; i < snake.size(); i++)
+		{
+			snake[i].getLocation(cX, cY);
+			snake[i].move(myDirection, 0.1);
+
+			if ((i + 1) >= snake.size())
+				break;
+
+			snake[i + 1].getLocation(nX, nY);
+
+			xOffset = cX - nX;
+			yOffset = cY - nY;
+
+			if (xOffset > 0)
+				myDirection = West;
+			else if (xOffset < 0)
+				myDirection = East;
+			else if (yOffset > 0)
+				myDirection = North;
+			else if (yOffset < 0)
+				myDirection = South;
+		}
 	}
 
 	// Draw the snake...
@@ -68,6 +160,11 @@ public:
 	void draw()
 	{
 		// code here...
+		for_each(snake.begin(),snake.end(),drawEach);
+	}
+	void drawEach(Square& s)
+	{
+		s.draw(r,g,b);
 	}
 };
 
