@@ -5,10 +5,10 @@
 
 #ifndef _SHAPE_H
 #define _SHAPE_H
-#include <math.h>
-#include <iostream>
 
-enum Direction {North, South, West, East, NorthWest, NorthEast, SouthWest, SouthEast};
+#include "Config.h"
+
+#include <iostream>
 
 class Shape
 {
@@ -31,7 +31,6 @@ public:
 	virtual void getLocation(double& x, double& y) { x = this->x, y = this->y; }
 	
 	// Move the shape to specified direction by given amount
-	// Beware of diagonal directions (Remember how hypotenuse != side)
 	virtual void move(Direction direction, double offset)
 	{
 		switch (direction)
@@ -40,10 +39,6 @@ public:
 		case South: y -= offset; break;
 		case West: x -= offset; break;
 		case East: x += offset; break;
-		case NorthWest: offset /= sqrt(2); x -= offset; y += offset; break;
-		case NorthEast: offset /= sqrt(2); x += offset; y += offset; break;
-		case SouthWest: offset /= sqrt(2); x -= offset; y -= offset; break;
-		case SouthEast: offset /= sqrt(2); x += offset; y -= offset; break;
 		default: std::cout << "Error: invalid direction.\n";				// Error message
 		}
 	}

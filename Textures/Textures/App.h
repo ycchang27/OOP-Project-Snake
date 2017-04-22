@@ -6,9 +6,12 @@
 
 // General testing purposes:
 #include "Square.h"
+#include "GameManager.h"
+#include "Fruit.h"
+#include "Snake.h"
 #include <vector>
 
-// Texture purposes:
+// Texture purposes (Still being tested):
 #include "RgbImage.h"
 #include "TexRect.hpp"
 

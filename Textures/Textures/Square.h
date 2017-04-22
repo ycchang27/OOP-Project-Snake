@@ -14,13 +14,13 @@ class Square : public Shape						// Extends Shape
 {
 private:
 	// Private instance variables
-	double side;								// Side of a square
+	double side;								// Side of a square (defined in Config.h)
 
 public:
-	// Constructors
+	// Constructors:
 	// Square's point represents the point at the top left corner
-	Square() : side(0.1) { x = 0.0; y = 0.0; }
-	Square(double x, double y, double side) : side(side) { this->x = x; this->y = y; }
+	Square() : side(SQUARE_SIDE) { x = 0.0; y = 0.0; }
+	Square(double x, double y) : side(SQUARE_SIDE) { this->x = x; this->y = y; }
 	
 	// Public methods
 	void draw(double r, double g, double b)		// Override draw method

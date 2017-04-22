@@ -18,19 +18,15 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
     painting = new TexRect(0, 0.67, 0.5, 0.67);
 
 	// TEST YOUR CODE HERE:
-	test = Square(-0.05, 0.05, 0.1);					// center
+	test = Square(-0.05, 0.05);						// center
 	double temp_x = 0, temp_y = 0;
 	test.getLocation(temp_x, temp_y);
-	for (int i = 0; i <= 7; ++i)
-		tests.push_back(Square(temp_x, temp_y, 0.1));	// surrounding squares
+	for (int i = 0; i <= 3; ++i)
+		tests.push_back(Square(temp_x, temp_y));	// surrounding squares
 	tests[0].move(North, 0.3);
 	tests[1].move(South, 0.3);
 	tests[2].move(West, 0.3);
 	tests[3].move(East, 0.3);
-	tests[4].move(NorthWest, 0.3);
-	tests[5].move(NorthEast, 0.3);
-	tests[6].move(SouthWest, 0.3);
-	tests[7].move(SouthEast, 0.3);
 	// END TESTING
 }
 
@@ -48,7 +44,7 @@ void App::draw() {
 
 	// TEST YOUR CODE HERE:
 	test.draw(1.0, 1.0, 1.0);
-	for (int i = 0; i <= 7; ++i)
+	for (int i = 0; i <= 3; ++i)
 		tests[i].draw(0.0, 1.0, 1.0);
 	// END TESTING
 
