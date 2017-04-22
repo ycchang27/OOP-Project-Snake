@@ -1,0 +1,8 @@
+﻿  App.cpp
+c:\users\yun\documents\oop-project-snake-\textures\textures\square.h(31): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\yun\documents\oop-project-snake-\textures\textures\square.h(32): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\yun\documents\oop-project-snake-\textures\textures\square.h(33): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\yun\documents\oop-project-snake-\textures\textures\square.h(34): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\yun\documents\oop-project-snake-\textures\textures\app.cpp(18): warning C4305: 'argument': truncation from 'double' to 'float'
+  glutapp.vcxproj -> C:\Users\Yun\Documents\OOP-Project-Snake-\Textures\Textures\visualc15\obj\glutapp_Debug\glutapp.exe
+  glutapp.vcxproj -> obj\glutapp_Debug\glutapp.pdb (Full PDB)
