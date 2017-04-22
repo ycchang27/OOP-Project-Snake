@@ -31,12 +31,9 @@ public:
 	// Also insert tail and body in the middle;
 	// The square (with side length 0.1) should be at the starting position.
 	// Default color for snake would be white (1.0, 1.0, 1.0)
-	Snake()
+	Snake() : r(1.0), g(1.0), b(1.0)
 	{
 		// code here...
-		r = 1.0;
-		g = 1.0;
-		b = 1.0;
 		snake.push_back(Square());
 		snake.push_back(Square(0.0,-0.1));
 		snake.push_back(Square(0.0, -0.2));
@@ -130,6 +127,26 @@ public:
 		double nY;
 		double xOffset;
 		double yOffset;
+
+		// add check to make sure doesn't go in opposite direction of where it's currently heading
+		snake[0].getLocation(cX, cY);
+		snake[1].getLocation(nX, nY);
+
+		xOffset = cX - nX;
+		yOffset = cY - nY;
+
+		if (xOffset > 0)
+			myDirection = West;
+		else if (xOffset < 0)
+			myDirection = East;
+		else if (yOffset > 0)
+			myDirection = North;
+		else if (yOffset < 0)
+			myDirection = South;
+
+		if ((myDirection == North && direction == South) || (myDirection == South && direction == North)
+			|| (myDirection == West && direction == East) || (myDirection == East && direction == West))
+			myDirection = direction;
 
 		for (int i = 0; i < snake.size(); i++)
 		{
