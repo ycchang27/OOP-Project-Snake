@@ -177,11 +177,10 @@ public:
 	void draw()
 	{
 		// code here...
-		for_each(snake.begin(),snake.end(),drawEach);
-	}
-	void drawEach(Square& s)
-	{
-		s.draw(r,g,b);
+		for (int i = 0; i < snake.size(); i++)
+		{
+			snake[i].draw(r, g, b);
+		}
 	}
 };
 
