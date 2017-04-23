@@ -9,6 +9,7 @@
 #include "GameManager.h"
 #include "Fruit.h"
 #include "Snake.h"
+#include "ScoreKeeper.h"
 #include <vector>
 
 // Texture purposes (Still being tested):
@@ -23,7 +24,6 @@ class App: public GlutApp {
 	// TEST YOUR CODE HERE:
 	Square test;
 	std::vector<Square> tests;
-
 	// END TESTING
 public:
     // Constructor, to initialize state
