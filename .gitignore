@@ -286,3 +286,15 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+*.suo
+*.suo
+Snake/visualc15/.vs/glutapp/v14/.suo
+*.db
+*.obj
+Snake/visualc15/obj/glutapp_Debug/glutapp.exe
+*.ilk
+*.log
+Snake/visualc15/obj/glutapp_Debug/glutapp.pdb
+*.tlog
+Snake/visualc15/obj/glutapp_Debug/glutapp.tlog/CL.command.1.tlog
+*.pdb
