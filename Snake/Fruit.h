@@ -23,7 +23,7 @@ private:
 
 public:
 	// Constructors:
-	Fruit() {}			// Temporary default constructor (will be deleted later)
+	Fruit() {}			// does nothing (must call the other constructor)
 
 	// Initialize the square (side is already defined)
 	Fruit(double x, double y, double r, double g, double b) 
@@ -31,9 +31,7 @@ public:
 		fruit = Square(x, y);
 		this -> r = r;
 		this -> g = g;
-		this-> b = b;
-
-		// code here...	
+		this -> b = b;
 	}
 
 	// Public method:
@@ -42,6 +40,12 @@ public:
 	void draw()
 	{
 		fruit.draw(r,g,b);
+	}
+
+	// check if fruit contains the square
+	bool isThereCollision(Square& checkMe)
+	{
+		fruit.contains(checkMe);
 	}
 };
 

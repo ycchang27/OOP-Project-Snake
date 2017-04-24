@@ -9,8 +9,10 @@
 #include "GameManager.h"
 #include "Fruit.h"
 #include "Snake.h"
-#include "ScoreKeeper.h"
 #include <vector>
+
+// Actual Run header(s)
+#include "ScoreKeeper.h"
 
 // Texture purposes (Still being tested):
 #include "RgbImage.h"
@@ -24,29 +26,34 @@ class App: public GlutApp {
 	// TEST YOUR CODE HERE:
 	Square test;
 	std::vector<Square> tests;
+	
+	// GameManager (Actual Run):
+	 GameManager game;
+	
 	// END TESTING
 public:
-    // Constructor, to initialize state
+	// WARNING: DO NOT ADD ANY METHODS WITHOUT ANY PERMISSION
+
+	// Constructor, to initialize state
     App(const char* label, int x, int y, int w, int h);
     
     // These are the events we want to handle
     void draw();
+	void idle();
     void keyPress(unsigned char key);
+	void specialKeyPress(int key);
 
-	// NOTE: DO NOT ADD ANY METHODS WITHOUT ANY PERMISSION
     
 	// IGNORE THE FOLLOWING (Still being tested):
     GLuint loadTexture(const char* filename);
-    
-    GLuint monalisa;
-    GLuint wall;
-    
-    TexRect* painting;
-    TexRect* background;
 
 	// IGNORE THE FOLLOWING (Will not be used):
 	void mouseDown(float x, float y);
 	void mouseDrag(float x, float y);
+	GLuint monalisa;
+	GLuint wall;
+	TexRect* painting;
+	TexRect* background;
 };
 
 #endif

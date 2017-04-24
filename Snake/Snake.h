@@ -1,6 +1,6 @@
 /*
 	Author: Yun Chul Chang
-	Editor(s): Yun Chul Chang, Jose Sandoval, Edwin Ramirez
+	Editor(s): Yun Chul Chang, David Cabral, Edwin Ramirez
 	Purpose: Represent a snake object
 */
 
@@ -25,27 +25,14 @@ private:
 	double r, g, b;
 
 public:
-	// Constructor:
+	// Constructors:
+	Snake() {}			// does nothing
 
-	// Insert a square into the vector (Represents the head).
-	// Also insert tail and body in the middle;
-	// The square (with side length 0.1) should be at the starting position.
-	// Default color for snake would be white (1.0, 1.0, 1.0)
-	Snake() : r(1.0), g(1.0), b(1.0)
+	// Insert 3 squares into the vector (head, body, and tail)
+	// The square has already-defined side length 0.1
+	Snake(double x, double y, double r, double g, double b)
 	{
 		// code here...
-		snake.push_back(Square());
-		snake.push_back(Square(0.0,-0.1));
-		snake.push_back(Square(0.0, -0.2));
-	}
-
-	// Same except that color is specified
-	Snake(double r, double g, double b)
-	{
-		// code here...
-		this->r = r;
-		this->g = g;
-		this->b = b;
 	}
 
 	// Public methods:
@@ -172,12 +159,19 @@ public:
 		}
 	}
 
+	// Traverse through the vector and see if any of them contains the square
+	// If it's the same snake, don't check the first index (since head == head)
+	bool isThereCollision(Square checkMe, bool same_snake)
+	{
+		// code here...
+	}
+
 	// Draw the snake...
 	// For each square in the vector and call draw function. Read Square.h for more details
 	void draw()
 	{
 		// code here...
-		for_each(snake.begin(),snake.end(),drawEach);
+		//for_each(snake.begin(),snake.end(),drawEach);
 	}
 	void drawEach(Square& s)
 	{

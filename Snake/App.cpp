@@ -30,6 +30,18 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 	// END TESTING
 }
 
+void App::idle() {
+	// Check whether it is the time to "run" or not
+	if (game.currentStatus() == GameOver || game.currentStatus() == StandBy || game.currentMode() == Menu || game.currentMode() == ScoreDisplay)
+		return;
+	else
+	{
+		if(game.currentMode() == AIMode)			// AI feature: AI always makes decide to turn each "run" (can face the same direction as previous one)
+			game.AIDecision();
+		redraw();									// run
+	}
+}
+
 void App::draw() {
 
     // Clear the screen
@@ -46,6 +58,19 @@ void App::draw() {
 	test.draw(1.0, 1.0, 1.0);
 	for (int i = 0; i <= 3; ++i)
 		tests[i].draw(0.0, 1.0, 1.0);
+
+	// GameManager (Actual Run):
+	// game mode check
+	switch (game.currentMode())
+	{
+	case Menu: game.displayMenu(); break;						// Display menu
+	case ScoreDisplay: game.displayScoreboard(); break;			// Display scoreboard
+	default: game.run(); break;									// Run/continue the game
+	}
+	// check end condition
+	if (game.currentStatus() == GameOver)
+		game.end();
+
 	// END TESTING
 
 	/*
@@ -72,13 +97,28 @@ void App::draw() {
 }
 
 void App::keyPress(unsigned char key) {
-    if (key == 27){
-        // Exit the app when Esc key is pressed
-        exit(0);
-    }
+	if (key == 27) // Exit the app when Esc key is pressed
+		exit(0);
+	else
+	{
+		game.receiveInput(key);
+		game.setTurn(Player1);
+		game.changeDirection();
+	}
+}
+
+void App::specialKeyPress(int key) {
+	// Accepts special keys only in TwoPlayerMode/AIMode
+	if (game.currentMode() == TwoPlayerMode || game.currentMode() == AIMode)
+	{
+		game.receiveSpecialInput(key);
+		game.setTurn(Player2);
+		game.changeDirection();
+	}
 }
 
 // IGNORE THE FOLLOWING (Still being tested):
+
 GLuint App::loadTexture(const char *filename) {
 	GLuint texture_id;
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -90,36 +130,25 @@ GLuint App::loadTexture(const char *filename) {
 	// Pixel alignment: each row is word aligned (aligned to a 4 byte boundary)
 	//    Therefore, no need to call glPixelStore( GL_UNPACK_ALIGNMENT, ... );
 
-
 	glGenTextures(1, &texture_id);
 	glBindTexture(GL_TEXTURE_2D, texture_id);
-
-
-
-
 
 	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, theTexMap.GetNumCols(), theTexMap.GetNumRows(),
 		GL_RGB, GL_UNSIGNED_BYTE, theTexMap.ImageData());
 
 	return texture_id;
-
 }
 
 // IGNORE THE FOLLOWING (Will not be used):
+
 void App::mouseDown(float x, float y) {
 	// Update app state
 	mx = x;
 	my = y;
-
-	// Redraw the scene
-	redraw();
 }
 
 void App::mouseDrag(float x, float y) {
 	// Update app state
 	mx = x;
 	my = y;
-
-	// Redraw the scene
-	redraw();
 }

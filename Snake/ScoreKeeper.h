@@ -51,7 +51,7 @@ private:
 	{
 		// Find a place to insert
 		int index = 0;
-		for (auto it = score_list.begin(); it+1 != score_list.end(); ++it)
+		for (auto it = score_list.begin(); it + 1 != score_list.end(); ++it)
 		{
 			if (*it < insertMe)
 				break;
@@ -59,7 +59,7 @@ private:
 		}
 
 		// Insert into vector
-		if (index == score_list.size()-1)
+		if (index == score_list.size() - 1)
 			score_list.push_back(insertMe);
 		else
 			score_list.insert(score_list.begin() + index, insertMe);
@@ -68,14 +68,11 @@ private:
 public:
 	// Constructors:
 	
-	ScoreKeeper() {}						// Default constructor does nothing
-
 	// Import the scores from the file to a vector
 	// The scores in the file are sorted
-	ScoreKeeper(string player_name)
+	ScoreKeeper()
 	{
 		current_score = 0;					// Set current score to 0
-		this->player_name = player_name;	// Set the player_name
 		file_reader.open("../score.txt");	// Attempt opening the file
 		if (file_reader.is_open())
 		{
@@ -89,7 +86,7 @@ public:
 			{
 				// Get the score (string to char* conversion is needed for atoi)
 				getline(file_reader, line, '|');
-				temp = new char[line.size()+1];
+				temp = new char[line.size() + 1];
 				strcpy(temp, line.c_str());
 				score = atoi(temp);
 
@@ -107,12 +104,10 @@ public:
 	// Public methods:
 
 	// Save the current score if the score is in top 10
-	void save()
+	void save(string player_name)
 	{
-		// Check if the file has 10 scores or the current score is not in top 10
-		if (score_list.size() == 10 && current_score < lowest_score)
-			return ;								// Do nothing if true
-		
+		this->player_name = player_name;	// Set the player_name
+
 		// Attempt updating the file
 		file_writer.open("../score.txt");
 		if (file_writer.is_open())
@@ -125,7 +120,7 @@ public:
 			string insertMe = "";
 
 			// Set up the text to write
-			int i=0;
+			int i = 0;
 			insertMe += to_string(score_list[i].score) + "|" + score_list[i].player_name;
 			for (i = 1; i < n - 1; ++i)
 				insertMe += "|" + to_string(score_list[i].score) + "|" + score_list[i].player_name;
@@ -144,6 +139,12 @@ public:
 	void display(vector<Score> &fillMe)
 	{
 		fillMe = vector<Score>(score_list);
+	}
+
+	// Check if the current score belongs to top 10
+	bool isTop10()
+	{
+		return !(score_list.size() == 10 && current_score < lowest_score);
 	}
 
 	// Setter/Getter:
