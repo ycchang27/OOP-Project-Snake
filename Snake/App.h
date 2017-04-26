@@ -11,6 +11,7 @@
 #include "Snake.h"
 #include "ScoreKeeper.h"
 #include <vector>
+#include <time.h>
 
 // Texture purposes (Still being tested):
 #include "RgbImage.h"
@@ -20,10 +21,16 @@ class App: public GlutApp {
     // Maintain app state here
     float mx;
     float my;
+	int count;
 
 	// TEST YOUR CODE HERE:
 	Square test;
 	std::vector<Square> tests;
+	
+	Snake snake1;
+	time_t timerBegin;
+	time_t timerEnd;
+	int speed;
 	// END TESTING
 public:
     // Constructor, to initialize state
@@ -47,6 +54,7 @@ public:
 	// IGNORE THE FOLLOWING (Will not be used):
 	void mouseDown(float x, float y);
 	void mouseDrag(float x, float y);
+	void idle();
 };
 
 #endif
