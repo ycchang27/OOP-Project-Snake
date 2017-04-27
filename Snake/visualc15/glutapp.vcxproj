@@ -116,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="..\App.cpp" />
     <ClCompile Include="..\app_main.cpp" />
+    <ClCompile Include="..\GameManager.cpp" />
     <ClCompile Include="..\GlutApp.cpp" />
     <ClCompile Include="..\RgbImage.cpp" />
     <ClCompile Include="..\TexRect.cpp" />

@@ -13,10 +13,13 @@ enum Direction { North, South, West, East};
 enum Collision { NONE, FRUIT, WALL, SNAKE };
 
 // Game mode
-enum GameMode { SINGLE, TWOPLAYER, AI };
+enum GameMode { SinglePlayerMode, TwoPlayerMode, AIMode, Menu, ScoreDisplay };
+
+// Game status
+enum GameStatus { StandBy, InProgress, GameOver };
 
 // Player type
-enum Player { Player1, Player2 };
+enum Player { Player1, Player2, AI };
 
 // Square side
 #define SQUARE_SIDE 0.1

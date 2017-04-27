@@ -1,6 +1,6 @@
 /*
 	Author: Yun Chul Chang
-	Editor(s): Yun Chul Chang, David Cabral
+	Editor(s): Yun Chul Chang, Jose Sandoval, David Cabral, Edwin Ramirez
 	Purpose: Represent a game manager
 */
 
@@ -9,93 +9,213 @@
 
 #include "Snake.h"
 #include "Fruit.h"
+#include "ScoreKeeper.h"
+#include "GlutApp.h"
 
 class GameManager
 {
 private:
 	// Private instance variables:
 
-	// Game mode
+
+	// Game display mode
 	GameMode mode;
 
-	// Snake(s) would not move until a user makes a move, so
-	// snake(s) would not take any actions until this variable is true.
-	bool game_start;
+	// Status of the game
+	GameStatus status;
 
-	// Game score
-	// The score will be saved when the game is over (will be implemented later)
-	unsigned int game_score;
+	// Scorekeeper
+	//	- Only used in SinglePlayerMode
+	ScoreKeeper score;
 
-	// Victory
-	Player victory;
+	// Victory/Turn
+	Player victory, turn;
 
-	// Snakes (snake2 will not be used for single player mode)
-	// Also, snake2 can be either another player or AI
+	// Snakes
 	Snake snake1, snake2;
 
-	// Fruit
-	// It will respawn every x seconds (will be implemented later)
+	// Fruit ("Power-up" item)
 	Fruit fruit;
 
-	// Represents the direction that snake1 is facing.
-	// There are 4 possible values that this object may use: 
-	// North, South, West, East
-	Direction snake1_direction;
+	// Snake's direction
+	Direction snake1_direction, snake2_direction;
 
-	// Represents the direction that snake2 is facing.
-	// There are 4 possible values that this object may use: 
-	// North, South, West, East
-	Direction snake2_direction;
+	// User keyboard input
+	unsigned char keyboard;				// handles general input
+	int special_keyboard;				// handles special input
+
 
 public:
 	// Constructor:
-
-	// Determine the game mode and initialize variables as fit.
-	// For example, if the mode is SINGLEPLAYER, then only snake1 and fruit 
-	// would be initialized.
-	// game_start is initially false.
-	GameManager(GameMode mode) 
-	{
-		// code here...	
-	}
+	//	- Define some private variables to default (other variables are defined later):
+	//	- mode: Initially on Menu mode
+	//	- status: Initially on StandBy mode
+	//	- keyboard: Initially 'x'
+	//	- special_keyboard: Initially -1
+	GameManager();
 
 private:
 	// Private method(s):
-	
-	// AI can decide whether to change direction or not
-	void AIDecision()
-	{
-		// code here...
-	}
 
-	// Return the type of collision
-	// Player is defined in Config.h
-	Collision checkCollision(const Player player)
-	{
-		// code here...
-	}
+
+	// Return the type of collision that the player is facing:
+	//	- NONE: No collision
+	//	- FRUIT: Collision with Fruit
+	//	- WALL: Collision with the boundary
+	//	- SNAKE: Collision with a snake
+	//	- For example, check:
+	//		* Would the current location collide with itself?
+	//		* Would the current location collide with another snake? (Only in TwoPlayerMode and AIMode)
+	//		* Would the current location collide with the boundary?
+	//		* Would the current location collide with a fruit?
+	Collision checkCollision(const Player player);
+
+
+	// Setter...
+	// Reset the user input
+	void resetInput() { keyboard = 'x'; special_keyboard = -1; }
+
+	
+	// Initialization ("Constructor")...
+
+	
+	// "Constructor" for SinglePlayerMode:
+	//	- snake1: Call constructor that specifies location and color (green)
+	//	- fruit: Call constructor that specifies location and color (orange)
+	//	- score: Call default constructor
+	//	- turn: Player1
+	//	- snake1_direction: Initially is North
+	// Note: Spread out the objects so that they don't collide right away the game starts.
+	void setupSingle();
+
+	// "Constructor" for TwoPlayerMode:
+	//	- snake1: Call constructor that specifies location and color (green)
+	//	- fruit: Call constructor that specifies location and color (orange)
+	//	- snake2: Call constructor that specifies location and color (red)
+	//	- snake1_direction: Initially is North
+	//	- snake2_direction: Initially is South
+	// Note: Spread out the objects so that they don't collide right away the game starts.
+	void setupTwoPlayer();
+
+	// "Constructor" for AIMode:
+	//	- same as setupTwoPlayer()
+	// Note: Spread out the objects so that they don't collide right away the game starts.
+	void setupAI();
+
+
+	// run() helpers...
+	
+
+	// Run in SinglePlayerMode:
+	//	1) Make snake1 move
+	//	2) Check collision:
+	//		* NONE: Does nothing
+	//		* FRUIT: snake1 grows. score is incremented. fruit respawns in a next avaiable location. Then check for collision again.
+	//		* WALL: set status to GameOver
+	//		* SNAKE: set status to GameOver
+	void runSingle();
+
+	// Run in TwoPlayerMode:
+	//	1) Make snake1 move
+	//	2) Check collision:
+	//		* NONE: Does nothing
+	//		* FRUIT: snake1 grows. fruit respawns in a next avaiable location. Then check for collision again.
+	//		* WALL: set status to GameOver
+	//		* SNAKE: set status to GameOver and set victory to Player2
+	//	3) Make snake2 move
+	//	4) Check collision:
+	//		* NONE: Does nothing
+	//		* FRUIT: snake2 grows. fruit respawns in a next avaiable location. Then check for collision again.
+	//		* WALL: set status to GameOver
+	//		* SNAKE: set status to GameOver and set victory to Player1
+	void runTwoPlayer();
+
+	// Run in AIMode:
+	//	1) Make snake1 move
+	//	2) Check collision:
+	//		* NONE: Does nothing
+	//		* FRUIT: snake1 grows. fruit respawns in a next avaiable location. Then check for collision again.
+	//		* WALL: set status to GameOver
+	//		* SNAKE: set status to GameOver and set victory to AI
+	//	3) Make snake2 move
+	//	4) Check collision:
+	//		* NONE: Does nothing
+	//		* FRUIT: snake2 grows. fruit respawns in a next avaiable location. Then check for collision again.
+	//		* WALL: set status to GameOver
+	//		* SNAKE: set status to GameOver and set victory to Player1
+	void runAI();
 
 public:
 	// Public methods:
 
-	// Change snake1's or snake2's direction
-	// Player is defined in Config.h
-	void changeDirection(Direction new_direction, Player type)
+
+	// Main Game Loop:
+	//	- In StandBy mode, the game would not start until space bar has been pressed (Objects are displayed but does not move).
+	//	- In InProgress mode, the game would continue until an end condition is met
+	//	- In GameOver mode, the game stops running
+	void run();
+
+	// End Game Loop:
+	//	- Is only called when status = GameOver
+	//	- In SinglePlayerMode:
+	//		* If the score belongs in top 10, user input will be asked and saved into the score.txt.
+	//		* (Testing purposes): For now, terminal interface is used.
+	//	- In TwoPlayerMode/AIMode:
+	//		* Display whose victory it is (assume victory is already initialized).
+	//		* (Testing purposes): For now, terminal interface is used.
+	//	- The program ends with ESC button.
+	void end();
+
+	// Game Menu Display:
+	//	- Provide 4 options (to set the game mode): Single, TwoPlayer, AI, ScoreDisplay
+	//	- Option will be chosen depending on the keyboard input
+	//	- Options can be displayed with an already-made texture
+	//	- (Testing purposes): For now, terminal interface is used
+	void displayMenu();
+
+	// Scoreboard Display:
+	//	- Pressing space bar switches to menu display
+	//	- (Testing purposes): For now, terminal interface is used
+	void displayScoreboard();
+
+	// Change snake's direction:
+	//	- Set the direction depending on the user input
+	//	- Player1: 'w' = North; 's' = South; 'a' = West; 'd' = East
+	//	- Player2: up arrow = North; down arrow = South; left arrow = West; right arrow = East
+	//	- No option for AI (It's called somewhere else)
+	void changeDirection();
+
+	// AI's input:
+	//	- Used in AI mode
+	//	- Decide and set AI's direction (Maybe avoiding wall collision?)
+	//	- Choose between North, South, West, East
+	//	- Remember that AI = snake2 in AIMode
+	void AIDecision();
+
+	// Setters:
+	// Receive general user input
+	void receiveInput(unsigned char input) { keyboard = input; }
+	// Receive special user input
+	void receiveSpecialInput(int input) { special_keyboard = input; }
+	// Set turn
+	void setTurn(Player turn)
 	{
-		// code here...	
+		if(mode == SinglePlayerMode)							// SinglePlayerMode
+			return ;											// Turn is fixed
+		else
+		{
+			if (mode == TwoPlayerMode)							// TwoPlayerMode
+				this->turn = turn;
+			else												// AIMode
+				this->turn = (turn == Player1) ? Player1 : AI;	// AI's turn implementation is... special
+		}
 	}
 
-	// Update the game accordingly to the game mode...
-	// snake1 will move according to its direction.
-	// snake2 will either act like snake1 or will decide its next action if it's AI mode.
-	// Watch out for the collision for each move.
-	// If the collision type (look at Config.h) is WALL or SNAKE, whichever snake loses,
-	// and the game ends.
-	// If the collision type is FRUIT, then the snake powers up
-	void updateGame()
-	{
-		// code here...
-	}
+	// Getters:
+	// Display current game status
+	GameStatus currentStatus() { return status; }
+	// Display current game mode
+	GameMode currentMode() { return mode; }
 };
 
 #endif // _GAMEMANAGER_H
