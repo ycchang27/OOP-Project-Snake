@@ -10,6 +10,10 @@
 #include "Fruit.h"
 #include "Snake.h"
 #include <vector>
+#include <time.h>
+
+// Actual Run header(s)
+#include "ScoreKeeper.h"
 
 // Texture purposes (Still being tested):
 #include "RgbImage.h"
@@ -19,34 +23,50 @@ class App: public GlutApp {
     // Maintain app state here
     float mx;
     float my;
+	int count;
 
 	// TEST YOUR CODE HERE:
 	Square test;
 	std::vector<Square> tests;
-
+	
+<<<<<<< HEAD
+	Snake snake1;
+	time_t timerBegin;
+	time_t timerEnd;
+	int speed;
+=======
+	// GameManager (Actual Run):
+	 GameManager game;
+	
+>>>>>>> origin/master
 	// END TESTING
 public:
-    // Constructor, to initialize state
+	// WARNING: DO NOT ADD ANY METHODS WITHOUT ANY PERMISSION
+
+	// Constructor, to initialize state
     App(const char* label, int x, int y, int w, int h);
     
     // These are the events we want to handle
     void draw();
+	void idle();
     void keyPress(unsigned char key);
+	void specialKeyPress(int key);
 
-	// NOTE: DO NOT ADD ANY METHODS WITHOUT ANY PERMISSION
     
 	// IGNORE THE FOLLOWING (Still being tested):
     GLuint loadTexture(const char* filename);
-    
-    GLuint monalisa;
-    GLuint wall;
-    
-    TexRect* painting;
-    TexRect* background;
 
 	// IGNORE THE FOLLOWING (Will not be used):
 	void mouseDown(float x, float y);
 	void mouseDrag(float x, float y);
+<<<<<<< HEAD
+	void idle();
+=======
+	GLuint monalisa;
+	GLuint wall;
+	TexRect* painting;
+	TexRect* background;
+>>>>>>> origin/master
 };
 
 #endif

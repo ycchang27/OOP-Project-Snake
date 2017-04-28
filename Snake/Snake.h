@@ -1,6 +1,6 @@
 /*
 	Author: Yun Chul Chang
-	Editor(s): Yun Chul Chang, Jose Sandoval, Edwin Ramirez
+	Editor(s): Yun Chul Chang, David Cabral, Edwin Ramirez
 	Purpose: Represent a snake object
 */
 
@@ -24,19 +24,22 @@ private:
 	// Color of the snake
 	double r, g, b;
 
-public:
-	// Constructor:
+	Direction direct;
 
-	// Insert a square into the vector (Represents the head).
-	// Also insert tail and body in the middle;
-	// The square (with side length 0.1) should be at the starting position.
-	// Default color for snake would be white (1.0, 1.0, 1.0)
-	Snake() : r(1.0), g(1.0), b(1.0)
+public:
+	// Constructors:
+	Snake() {}			// does nothing
+
+	// Insert 3 squares into the vector (head, body, and tail)
+	// The square has already-defined side length 0.1
+	Snake(double x, double y, double r, double g, double b)
 	{
 		// code here...
+<<<<<<< HEAD
 		snake.push_back(Square());
 		snake.push_back(Square(0.0,-0.1));
 		snake.push_back(Square(0.0, -0.2));
+		direct = North;
 	}
 
 	// Same except that color is specified
@@ -46,6 +49,8 @@ public:
 		this->r = r;
 		this->g = g;
 		this->b = b;
+=======
+>>>>>>> origin/master
 	}
 
 	// Public methods:
@@ -85,7 +90,7 @@ public:
 		else if (yOffset < 0)
 			y += 0.1;
 		
-		if (x >= 1.0)
+		/*if (x >= 1.0)
 		{
 			x -= 0.1;
 			y -= 0.1;
@@ -105,7 +110,7 @@ public:
 		{
 			x += 0.1;
 			y += 0.1;
-		}
+		}*/
 		// check if location is valid first before putting in
 		snake.push_back(Square(x, y));
 	}
@@ -127,6 +132,7 @@ public:
 		double nY;
 		double xOffset;
 		double yOffset;
+		double offset = 0.1;
 
 		// add check to make sure doesn't go in opposite direction of where it's currently heading
 		snake[0].getLocation(cX, cY);
@@ -134,24 +140,65 @@ public:
 
 		xOffset = cX - nX;
 		yOffset = cY - nY;
+		/*std::cout << "\n";
+		std::cout << "Head position = (" << cX << ", " << cY << ")\n";
+		std::cout << "Body position = (" << nX << ", " << nY << ")\n";*/
+		snake[2].getLocation(cX, cY);
+		/*std::cout << "tail position = (" << cX << ", " << cY << ")\n";
+		std::cout << "---------------------------------------------------\n";*/
 
-		if (xOffset > 0)
-			myDirection = West;
-		else if (xOffset < 0)
-			myDirection = East;
-		else if (yOffset > 0)
-			myDirection = North;
-		else if (yOffset < 0)
-			myDirection = South;
-
-		if ((myDirection == North && direction == South) || (myDirection == South && direction == North)
-			|| (myDirection == West && direction == East) || (myDirection == East && direction == West))
-			myDirection = direction;
+		if ((direct == North && direction == South) || (direct == South && direction == North)
+			|| (direct == West && direction == East) || (direct == East && direction == West))
+			myDirection = direct;
 
 		for (int i = 0; i < snake.size(); i++)
 		{
+			std::cout << "i value = " << i << "\n";
 			snake[i].getLocation(cX, cY);
-			snake[i].move(myDirection, 0.1);
+			std::cout << "cX = " << cX << "\n";
+			std::cout << "cY = " << cY << "\n";
+			
+			if (cX >= 0.8)
+			{
+				if (myDirection == East)
+					offset = -(cX + 1.0);
+				else if (myDirection == West)
+					offset = (cX + 1.0);
+			}
+			else if (cX <= -1.1)
+			{
+					if (myDirection == East)
+						offset = -(cX - 0.9);
+					else if (myDirection == West)
+						offset = (cX - 0.9);
+			}
+			else if (cY >= 1.0)
+			{
+				if (myDirection == South)
+					offset = (cY + 0.9);
+				else if (myDirection == North)
+					offset = -(cY + 0.9);
+			}
+			else if (cY <= -1.0)
+			{
+				if (myDirection == South)
+					offset = (cY - 0.9);
+				else if (myDirection == North)
+					offset = -(cY - 0.9);
+			}
+			else
+				offset = 0.1;
+			/*std::cout << "offset = " << offset << "\n";
+			if (myDirection == East)
+				std::cout << "Direction = East\n";
+			else if (myDirection == West)
+				std::cout << "Direction = West\n";
+			else if (myDirection == North)
+				std::cout << "Direction = North\n";
+			else if (myDirection == South)
+				std::cout << "Direction = South\n";
+			std::cout << "---------------------------------------------------\n";*/
+			snake[i].move(myDirection, offset);
 
 			if ((i + 1) >= snake.size())
 				break;
@@ -161,27 +208,72 @@ public:
 			xOffset = cX - nX;
 			yOffset = cY - nY;
 
+			/*std::cout << "i value = " << i << "\n";
+			std::cout << "xOffset = " << xOffset << "\n";
+			std::cout << "cX = " << cX << "\n";
+			std::cout << "nX = " << nX << "\n";
+			std::cout << "yOffset = " << yOffset << "\n";
+			std::cout << "cY = " << cY << "\n";
+			std::cout << "nY = " << nY << "\n";
+			std::cout << "---------------------------------------------------\n";*/
+
 			if (xOffset > 0)
-				myDirection = West;
-			else if (xOffset < 0)
 				myDirection = East;
+			else if (xOffset < 0)
+				myDirection = West;
 			else if (yOffset > 0)
 				myDirection = North;
 			else if (yOffset < 0)
 				myDirection = South;
+
 		}
 	}
+	bool checkBounds()
+	{
+		double x;
+		double y;
 
+		snake[0].getLocation(x, y);
+
+		if (x >= 1.0 || x <= -1.0)
+			return false;
+		else if (y >= 1.0 || y <= -1.0)
+			return false;
+		else
+			return true;
+	}
+	Direction getDirection()
+	{
+		return direct;
+	}
+	void setDirection(Direction d)
+	{
+
+		if ((direct == North && d == South) || (direct == South && d == North)
+			|| (direct == West && d == East) || (direct == East && d == West))
+			d = direct;
+
+<<<<<<< HEAD
+		direct = d;
+	}
+=======
+	// Traverse through the vector and see if any of them contains the square
+	// If it's the same snake, don't check the first index (since head == head)
+	bool isThereCollision(Square checkMe, bool same_snake)
+	{
+		// code here...
+	}
+
+>>>>>>> origin/master
 	// Draw the snake...
 	// For each square in the vector and call draw function. Read Square.h for more details
 	void draw()
 	{
 		// code here...
-		for_each(snake.begin(),snake.end(),drawEach);
-	}
-	void drawEach(Square& s)
-	{
-		s.draw(r,g,b);
+		for (int i = 0; i < snake.size(); i++)
+		{
+			snake[i].draw(r, g, b);
+		}
 	}
 };
 
