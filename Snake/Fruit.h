@@ -24,7 +24,7 @@ private:
 public:
 	// Constructors:
 	Fruit() {}			// does nothing (must call the other constructor)
-
+	
 	// Initialize the square (side is already defined)
 	Fruit(double x, double y, double r, double g, double b) 
 	{
@@ -45,7 +45,7 @@ public:
 	// check if fruit contains the square
 	bool isThereCollision(Square& checkMe)
 	{
-		fruit.contains(checkMe);
+		return fruit.contains(checkMe);
 	}
 };
 

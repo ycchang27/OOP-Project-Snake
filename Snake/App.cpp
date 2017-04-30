@@ -18,6 +18,7 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
     background = new TexRect(-1, 1, 2, 2);
     painting = new TexRect(0, 0.67, 0.5, 0.67);
 	stopMove = false;
+	woah = Fruit(0.1,0.5,1.0,0.0,0.0);
 	// TEST YOUR CODE HERE:
 	/*
 	test = Square(-0.05, 0.05);						// center
@@ -73,11 +74,18 @@ void App::draw() {
 	*/
 	time(&timerEnd);
 	snake1.draw();
+	woah.draw();
 	if (count >= speed)
 	{
 		if (!stopMove)
 		{
 			snake1.move(snake1.getDirection());
+			
+			if (woah.isThereCollision(snake1.getHead()))
+			{
+				snake1.grow();
+			}
+			snake1.isThereCollision(snake1.getHead(), true);
 			//std::cout << "Snake is moving\n";
 		}
 		time(&timerBegin);

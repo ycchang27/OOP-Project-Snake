@@ -44,25 +44,32 @@ public:
 	{
 		double temp_x, temp_y;					// temp x, y to get location of the parameter square
 		checkMe.getLocation(temp_x, temp_y);
+		temp_x += side / 2;
+		temp_y -= side / 2;
 
-		// Case #1: The parameter square is on top of the square
-		if (x == temp_x && y == temp_y)
+	
+		if (temp_x > x && temp_x < (x + side) && temp_y < y && temp_y >(y - side))
 			return true;
-		// Case #2: Top left point is in the square
-		else if ((x < temp_x && temp_x < x + side) && (y - side < temp_y && temp_y < y))
-			return true;
-		// Case #3: Top right point is in the square
-		else if ((x < temp_x + side && temp_x + side < x + side) && (y - side < temp_y && temp_y < y))
-			return true;
-		// Case #4: Bot left point is in the square
-		else if ((x < temp_x && temp_x < x + side) && (y - side < temp_y - side && temp_y - side < y))
-			return true;
-		// Case #5: Bot right point is in the square
-		else if ((x < temp_x + side && temp_x + side < x + side) && (y - side < temp_y - side && temp_y - side < y))
-			return true;
-		// Case #6: None (no collision)
 		else
 			return false;
+		//// Case #1: The parameter square is on top of the square
+		//if (x == temp_x && y == temp_y)
+		//	return true;
+		//// Case #2: Top left point is in the square
+		//else if ((x < temp_x && temp_x < x + side) && (y - side < temp_y && temp_y < y))
+		//	return true;
+		//// Case #3: Top right point is in the square
+		//else if ((x < temp_x + side && temp_x + side < x + side) && (y - side < temp_y && temp_y < y))
+		//	return true;
+		//// Case #4: Bot left point is in the square
+		//else if ((x < temp_x && temp_x < x + side) && (y - side < temp_y - side && temp_y - side < y))
+		//	return true;
+		//// Case #5: Bot right point is in the square
+		//else if ((x < temp_x + side && temp_x + side < x + side) && (y - side < temp_y - side && temp_y - side < y))
+		//	return true;
+		//// Case #6: None (no collision)
+		//else
+		//	return false;
 	}
 };
 

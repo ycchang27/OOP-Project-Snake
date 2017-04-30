@@ -111,6 +111,14 @@ public:
 		}*/
 		// check if location is valid first before putting in
 		snake.push_back(Square(x, y));
+
+		cout << "Snake growing with (" << x << ", " << y << ")\n";
+
+		for (int i = 0; i < snake.size(); i++)
+		{
+			snake[i].getLocation(x, y);
+			cout << "Body part at (" << x << ", " << y << ")\n";
+		}
 	}
 
 	// Move the snake by 0.1 in a specified direction...
@@ -318,6 +326,10 @@ public:
 		}
 		*/
 	}
+	Square getHead()
+	{
+		return snake[0];
+	}
 	bool checkBounds()
 	{
 		double x;
@@ -350,6 +362,31 @@ public:
 	bool isThereCollision(Square checkMe, bool same_snake)
 	{
 		// code here...
+
+		if (same_snake)
+		{
+			for (int i = 1; i < snake.size(); i++)
+			{
+				if (snake[i].contains(checkMe))
+				{
+					cout << "Collision with body\n";
+					return true;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < snake.size(); i++)
+			{
+				if (snake[i].contains(checkMe))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+
 	}
 
 	// Draw the snake...
