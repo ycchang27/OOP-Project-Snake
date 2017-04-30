@@ -29,16 +29,14 @@ class App: public GlutApp {
 	Square test;
 	std::vector<Square> tests;
 	
-<<<<<<< HEAD
 	Snake snake1;
 	time_t timerBegin;
 	time_t timerEnd;
 	int speed;
-=======
 	// GameManager (Actual Run):
 	 GameManager game;
 	
->>>>>>> origin/master
+
 	// END TESTING
 public:
 	// WARNING: DO NOT ADD ANY METHODS WITHOUT ANY PERMISSION
@@ -59,14 +57,10 @@ public:
 	// IGNORE THE FOLLOWING (Will not be used):
 	void mouseDown(float x, float y);
 	void mouseDrag(float x, float y);
-<<<<<<< HEAD
-	void idle();
-=======
 	GLuint monalisa;
 	GLuint wall;
 	TexRect* painting;
 	TexRect* background;
->>>>>>> origin/master
 };
 
 #endif
