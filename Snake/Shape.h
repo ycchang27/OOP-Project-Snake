@@ -29,6 +29,9 @@ public:
 	
 	// Gives the shape's location by passing values to the parameters
 	virtual void getLocation(double& x, double& y) { x = this->x, y = this->y; }
+
+	// Sets the shapes location
+	virtual void setLocation(double& x, double&y) { this->x = x, this->y = y; }
 	
 	// Move the shape to specified direction by given amount
 	virtual void move(Direction direction, double offset)

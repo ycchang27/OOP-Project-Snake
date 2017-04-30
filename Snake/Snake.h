@@ -124,24 +124,30 @@ public:
 	{
 		// code here...
 		Direction myDirection = direction;
-		double cX;
-		double cY;
-		double nX;
+		//double cX;
+		//double cY;
+		/*double nX;
 		double nY;
 		double xOffset;
-		double yOffset;
+		double yOffset;*/
+		double x;
+		double y;
+		double newX;
+		double newY;
 		double offset = 0.1;
+		
+		snake[0].getLocation(x, y);
 
 		// add check to make sure doesn't go in opposite direction of where it's currently heading
-		snake[0].getLocation(cX, cY);
-		snake[1].getLocation(nX, nY);
+		//snake[0].getLocation(cX, cY);
+		//snake[1].getLocation(nX, nY);
 
-		xOffset = cX - nX;
-		yOffset = cY - nY;
+		//xOffset = cX - nX;
+		//yOffset = cY - nY;
 		/*std::cout << "\n";
 		std::cout << "Head position = (" << cX << ", " << cY << ")\n";
 		std::cout << "Body position = (" << nX << ", " << nY << ")\n";*/
-		snake[2].getLocation(cX, cY);
+		//snake[2].getLocation(cX, cY);
 		/*std::cout << "tail position = (" << cX << ", " << cY << ")\n";
 		std::cout << "---------------------------------------------------\n";*/
 
@@ -149,7 +155,64 @@ public:
 			|| (direct == West && direction == East) || (direct == East && direction == West))
 			myDirection = direct;
 
-		for (int i = 0; i < snake.size(); i++)
+
+		if (x > 0.8)
+		{
+			if (myDirection == West)
+				offset = 0.1;
+			else
+				offset = -(x + 1.0);
+		}
+		else if (x < -0.9)
+		{
+			if (myDirection == West)
+				offset = (x - 0.9);
+			else
+				offset = 0.1;
+		}
+		else if (y > 0.9)
+		{
+			cout << "Y is greater than 0.9\n";
+
+			if (myDirection == North)
+				offset = -(y + 0.9);
+			else
+				offset = 0.1;
+		}
+		else if (y < -0.8)
+		{
+			cout << "Y is less than -0.8\n";
+
+			if (myDirection == North)
+				offset = 0.1;
+			else
+				offset = (y - 1.0);
+		}
+		
+		snake[0].move(myDirection, offset);
+		snake[0].getLocation(newX, newY);
+
+		cout << "Head Position (" << newX << ", " << newY << ")\n";
+		if (myDirection == East)
+			std::cout << "Direction = East\n";
+		else if (myDirection == West)
+			std::cout << "Direction = West\n";
+		else if (myDirection == North)
+			std::cout << "Direction = North\n";
+		else if (myDirection == South)
+			std::cout << "Direction = South\n";
+		std::cout << "---------------------------------------------------\n";
+
+		for (int i = 1; i < snake.size(); i++)
+		{
+			snake[i].getLocation(newX, newY);
+			snake[i].setLocation(x, y);
+
+			x = newX;
+			y = newY;
+		}
+
+	/*	for (int i = 0; i < snake.size(); i++)
 		{
 
 			snake[i].getLocation(cX, cY);
@@ -181,7 +244,7 @@ public:
 					offset = 0.0;
 				}
 			}
-			else if (cY <= -0.9)
+			else if (cY <= -0.8)
 			{
 				if (myDirection == North)
 				{
@@ -200,7 +263,7 @@ public:
 				}
 				else if (myDirection == South)
 				{
-					offset = -(cY + 1.0);
+					offset = -(cY + 0.9);
 				}
 				else
 				{
@@ -253,82 +316,7 @@ public:
 			else if (yOffset < 0)
 				myDirection = South;
 		}
-		/*for (int i = 0; i < snake.size(); i++)
-		{
-			std::cout << "i value = " << i << "\n";
-			snake[i].getLocation(cX, cY);
-			std::cout << "cX = " << cX << "\n";
-			std::cout << "cY = " << cY << "\n";
-			
-			if (cX >= 0.8)
-			{
-				if (myDirection == East)
-					offset = -(cX + 1.0);
-				else if (myDirection == West)
-					offset = (cX + 1.0);
-			}
-			else if (cX <= -1.1)
-			{
-					if (myDirection == East)
-						offset = -(cX - 0.9);
-					else if (myDirection == West)
-						offset = (cX - 0.9);
-			}
-			else if (cY > 0.9)
-			{
-				if (myDirection == South)
-					offset = (cY + 0.9);
-				else if (myDirection == North)
-					offset = -(cY + 0.9);
-			}
-			else if (cY < -1.0)
-			{
-				if (myDirection == South)
-					offset = (cY - 1.0);
-				else if (myDirection == North)
-					offset = -(cY - 1.0);
-			}
-			else
-				offset = 0.1;
-			std::cout << "offset = " << offset << "\n";
-			if (myDirection == East)
-				std::cout << "Direction = East\n";
-			else if (myDirection == West)
-				std::cout << "Direction = West\n";
-			else if (myDirection == North)
-				std::cout << "Direction = North\n";
-			else if (myDirection == South)
-				std::cout << "Direction = South\n";
-			std::cout << "---------------------------------------------------\n";
-			snake[i].move(myDirection, offset);
-
-			if ((i + 1) >= snake.size())
-				break;
-
-			snake[i + 1].getLocation(nX, nY);
-
-			xOffset = cX - nX;
-			yOffset = cY - nY;
-
-			/*std::cout << "i value = " << i << "\n";
-			std::cout << "xOffset = " << xOffset << "\n";
-			std::cout << "cX = " << cX << "\n";
-			std::cout << "nX = " << nX << "\n";
-			std::cout << "yOffset = " << yOffset << "\n";
-			std::cout << "cY = " << cY << "\n";
-			std::cout << "nY = " << nY << "\n";
-			std::cout << "---------------------------------------------------\n";
-
-			if (xOffset > 0)
-				myDirection = East;
-			else if (xOffset < 0)
-				myDirection = West;
-			else if (yOffset > 0)
-				myDirection = North;
-			else if (yOffset < 0)
-				myDirection = South;
-
-		} */
+		*/
 	}
 	bool checkBounds()
 	{
