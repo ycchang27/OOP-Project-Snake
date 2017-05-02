@@ -32,7 +32,11 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 	tests[3].move(East, 0.3);
 	*/
 	
+<<<<<<< HEAD
 	speed = 500;
+=======
+	speed = 10;
+>>>>>>> origin/master
 	count = 0;
 	// END TESTING
 }
@@ -73,8 +77,11 @@ void App::draw() {
 	*/
 	snake1.draw();
 	//woah.draw();
+	cout << count << endl;
 	if (count >= speed)
 	{
+		cout << "here" << endl;
+
 		if (!stopMove)
 		{
 			snake1.move(snake1.getDirection());

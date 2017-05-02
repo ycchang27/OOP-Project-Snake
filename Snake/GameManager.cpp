@@ -47,22 +47,32 @@ void GameManager::changeDirection()
 
 void GameManager::setupSingle()
 {
-	// code here...
+	Snake snake1(0.0,0.0,0,1,0);
+	Fruit fruit(1.0,1.0,1,0,1); 
+	ScoreKeeper score;
+	Player Player1;
 }
 
 void GameManager::setupTwoPlayer()
 {
-	// code here...
+	Snake snake1(0.2, 0.2, 0, 1, 0);
+	Fruit fruit(1.0, 1.0, 1, 0, 1);
+	Snake snake2(-0.2, -0.2, 0, 1, 0);
+
 }
 
 void GameManager::setupAI()
 {
-	// code here...
+	Snake snake1(0.2, 0.2, 0, 1, 0);
+	Fruit fruit(1.0, 1.0, 1, 0, 1);
+	Snake snake2(-0.2, -0.2, 0, 1, 0);
 }
 
 void GameManager::runSingle()
 {
-	// code here...
+	snake1.move(snake1_direction);
+	snake1.isThereCollision(snake1.getHead() , true);
+
 }
 
 void GameManager::runTwoPlayer()
