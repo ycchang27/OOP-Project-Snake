@@ -3,6 +3,10 @@
 GameManager::GameManager()
 {
 	// code here...	
+	mode = Menu;
+	status = StandBy;
+	keyboard = 'x';
+	special_keyboard = -1;
 }
 
 void GameManager::AIDecision()

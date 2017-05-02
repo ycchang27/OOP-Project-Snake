@@ -30,9 +30,8 @@ class App: public GlutApp {
 	std::vector<Square> tests;
 	
 	Snake snake1;
-	Fruit woah;
-	time_t timerBegin;
-	time_t timerEnd;
+	//Fruit woah;
+	
 	int speed;
 	// GameManager (Actual Run):
 	 GameManager game;

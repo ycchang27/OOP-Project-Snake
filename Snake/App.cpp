@@ -18,7 +18,7 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
     background = new TexRect(-1, 1, 2, 2);
     painting = new TexRect(0, 0.67, 0.5, 0.67);
 	stopMove = false;
-	woah = Fruit(0.1,0.5,1.0,0.0,0.0);
+	//woah = Fruit(0.1,0.5,1.0,0.0,0.0);
 	// TEST YOUR CODE HERE:
 	/*
 	test = Square(-0.05, 0.05);						// center
@@ -31,9 +31,8 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 	tests[2].move(West, 0.3);
 	tests[3].move(East, 0.3);
 	*/
-	time(&timerBegin);
-	time(&timerEnd);
-	speed = 3000;
+	
+	speed = 1000;
 	count = 0;
 	// END TESTING
 }
@@ -72,39 +71,37 @@ void App::draw() {
 	for (int i = 0; i <= 3; ++i)
 		tests[i].draw(0.0, 1.0, 1.0);
 	*/
-	time(&timerEnd);
 	snake1.draw();
-	woah.draw();
+	//woah.draw();
 	if (count >= speed)
 	{
 		if (!stopMove)
 		{
 			snake1.move(snake1.getDirection());
 			
-			if (woah.isThereCollision(snake1.getHead()))
+			/*if (woah.isThereCollision(snake1.getHead()))
 			{
 				snake1.grow();
-			}
+			}*/
 			snake1.isThereCollision(snake1.getHead(), true);
 			//std::cout << "Snake is moving\n";
 		}
-		time(&timerBegin);
-		time(&timerEnd);
+		
 		count = 0;
 	}
-	/*
+	
 	// GameManager (Actual Run):
 	// game mode check
-	switch (game.currentMode())
-	{
-	case Menu: game.displayMenu(); break;						// Display menu
-	case ScoreDisplay: game.displayScoreboard(); break;			// Display scoreboard
-	default: game.run(); break;									// Run/continue the game
-	}
-	// check end condition
-	if (game.currentStatus() == GameOver)
-		game.end();
-	*/
+	//switch (game.currentMode())
+	//{
+	//case Menu: game.displayMenu(); break;						// Display menu
+	//case ScoreDisplay: game.displayScoreboard(); break;			// Display scoreboard
+	//default: game.run(); break;									// Run/continue the game
+	//}
+	//// check end condition
+	//if (game.currentStatus() == GameOver)
+	//	game.end();
+	
 	// END TESTING
 
 	/*
@@ -139,6 +136,14 @@ void App::keyPress(unsigned char key) {
 	if (!snake1.checkBounds())
 	return;
 
+	//if (key == 27) // Exit the app when Esc key is pressed
+	//	exit(0);
+	//else
+	//{
+	//	game.receiveInput(key);
+	//	game.setTurn(Player1);
+	//	game.changeDirection();
+	//}
 	switch (key)
 	{
 	case 27: exit(0);
@@ -149,27 +154,21 @@ void App::keyPress(unsigned char key) {
 	case 's': snake1.setDirection(South); break;
 	default: std::cout << "No support for this key\n";
 	}
-	/*
-	if (key == 27) // Exit the app when Esc key is pressed
-		exit(0);
-	else
-	{
-		game.receiveInput(key);
-		game.setTurn(Player1);
-		game.changeDirection();
-	*/
+	
+	
+	
 }
 
 void App::specialKeyPress(int key) {
 	// Accepts special keys only in TwoPlayerMode/AIMode
-	/*
-	if (game.currentMode() == TwoPlayerMode || game.currentMode() == AIMode)
+	
+	/*if (game.currentMode() == TwoPlayerMode || game.currentMode() == AIMode)
 	{
 		game.receiveSpecialInput(key);
 		game.setTurn(Player2);
 		game.changeDirection();
-	}
-	*/
+	}*/
+	
 }
 
 // IGNORE THE FOLLOWING (Still being tested):
