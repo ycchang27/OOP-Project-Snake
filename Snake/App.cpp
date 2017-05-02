@@ -32,18 +32,16 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 	tests[3].move(East, 0.3);
 	*/
 	
-<<<<<<< HEAD
-	speed = 500;
-=======
-	speed = 10;
->>>>>>> origin/master
+
+	speed = 100;
+
 	count = 0;
 	// END TESTING
 }
 
 void App::idle() {
-	redraw();
-	/*
+	//redraw();
+	
 	// Check whether it is the time to "run" or not
 	if (game.currentStatus() == GameOver || game.currentStatus() == StandBy || game.currentMode() == Menu || game.currentMode() == ScoreDisplay)
 		return;
@@ -53,7 +51,7 @@ void App::idle() {
 			game.AIDecision();
 		redraw();									// run
 	}
-	*/
+	
 }
 
 void App::draw() {
@@ -75,13 +73,10 @@ void App::draw() {
 	for (int i = 0; i <= 3; ++i)
 		tests[i].draw(0.0, 1.0, 1.0);
 	*/
-	snake1.draw();
+	//snake1.draw();
 	//woah.draw();
-	cout << count << endl;
 	if (count >= speed)
 	{
-		cout << "here" << endl;
-
 		if (!stopMove)
 		{
 			snake1.move(snake1.getDirection());
@@ -99,15 +94,15 @@ void App::draw() {
 	
 	// GameManager (Actual Run):
 	// game mode check
-	//switch (game.currentMode())
-	//{
-	//case Menu: game.displayMenu(); break;						// Display menu
-	//case ScoreDisplay: game.displayScoreboard(); break;			// Display scoreboard
-	//default: game.run(); break;									// Run/continue the game
-	//}
-	//// check end condition
-	//if (game.currentStatus() == GameOver)
-	//	game.end();
+	switch (game.currentMode())
+	{
+	case Menu: game.displayMenu(); break;						// Display menu
+	case ScoreDisplay: game.displayScoreboard(); break;			// Display scoreboard
+	default: game.run(); break;									// Run/continue the game
+	}
+	// check end condition
+	if (game.currentStatus() == GameOver)
+		game.end();
 	
 	// END TESTING
 
@@ -140,18 +135,18 @@ void App::keyPress(unsigned char key) {
         exit(0);
     }
 
-	if (!snake1.checkBounds())
-	return;
+	/*if (!snake1.checkBounds())
+	return;*/
 
-	//if (key == 27) // Exit the app when Esc key is pressed
-	//	exit(0);
-	//else
-	//{
-	//	game.receiveInput(key);
-	//	game.setTurn(Player1);
-	//	game.changeDirection();
-	//}
-	switch (key)
+	if (key == 27) // Exit the app when Esc key is pressed
+		exit(0);
+	else
+	{
+		game.receiveInput(key);
+		game.setTurn(Player1);
+		game.changeDirection();
+	}
+	/*switch (key)
 	{
 	case 27: exit(0);
 	case 32: stopMove = !stopMove; break;
@@ -160,9 +155,9 @@ void App::keyPress(unsigned char key) {
 	case 'd': snake1.setDirection(East); break;
 	case 's': snake1.setDirection(South); break;
 	default: std::cout << "No support for this key\n";
-	}
+	}*/
 	
-	
+	redraw();
 	
 }
 
