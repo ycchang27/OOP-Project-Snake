@@ -337,9 +337,9 @@ public:
 
 		snake[0].getLocation(x, y);
 
-		if (x >= 1.0 || x <= -1.0)
+		if (x >= 1.0 || x <= -0.9)
 			return false;
-		else if (y >= 1.0 || y <= -1.0)
+		else if (y >= 1.0 || y <= -0.9)
 			return false;
 		else
 			return true;

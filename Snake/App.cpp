@@ -32,7 +32,7 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 	tests[3].move(East, 0.3);
 	*/
 	
-	speed = 1000;
+	speed = 500;
 	count = 0;
 	// END TESTING
 }
