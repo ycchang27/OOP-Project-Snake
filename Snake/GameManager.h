@@ -44,7 +44,7 @@ private:
 	unsigned char keyboard;				// handles general input
 	int special_keyboard;				// handles special input
 
-	int speed = 10;
+	int speed = 1400;
 	int count = 0;
 
 

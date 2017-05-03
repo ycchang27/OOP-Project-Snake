@@ -26,6 +26,49 @@ private:
 
 	Direction direct;
 
+	bool changedDirection;
+
+	void checkBounds()
+	{
+		double x;
+		double y;
+
+		snake[0].getLocation(x, y);
+
+		if (x > 0.9 || x < -1.0)
+		{
+			if (x > 0.9)
+			{
+				x = -1.0;
+				snake[0].setLocation(x, y);
+				//direct = East;
+			}
+			else
+			{
+				x = 0.9;
+				snake[0].setLocation(x, y);
+				//direct = West;
+			}
+
+		}
+		else if (y > 1.0 || y < -0.9)
+		{
+			if (y > 1.0)
+			{
+				y = -0.9;
+				snake[0].setLocation(x, y);
+				//direct = North;
+			}
+			else
+			{
+				y = 1.0;
+				snake[0].setLocation(x, y);
+				//direct = South;
+			}
+
+		}
+
+	}
 public:
 	// Constructors:
 	Snake() 
@@ -37,6 +80,7 @@ public:
 		r = 1;
 		g = 1;
 		b = 1;
+		changedDirection = false;
 	}			// does nothing
 
 	// Insert 3 squares into the vector (head, body, and tail)
@@ -51,7 +95,7 @@ public:
 		this->r = r;
 		this->g = g;
 		this->b = b;
-	
+		changedDirection = false;
 	}
 
 	// Public methods:
@@ -135,12 +179,7 @@ public:
 	{
 		// code here...
 		Direction myDirection = direction;
-		//double cX;
-		//double cY;
-		/*double nX;
-		double nY;
-		double xOffset;
-		double yOffset;*/
+		
 		double x;
 		double y;
 		double newX;
@@ -149,66 +188,16 @@ public:
 		
 		snake[0].getLocation(x, y);
 
+		//checkBounds();
 
 		if ((direct == North && direction == South) || (direct == South && direction == North)
 			|| (direct == West && direction == East) || (direct == East && direction == West))
 			myDirection = direct;
 
 
-		if (x > 0.8)
-		{
-			if (myDirection == West)
-				offset = 0.1;
-			else if (myDirection == East)
-				offset = -(x + 1.0);
-			else
-			{
-				myDirection = East;
-				offset = -(x + 1.0);
-			}
-		}
-		else if (x < -0.9)
-		{
-			if (myDirection == West)
-				offset = (x - 0.9);
-			else if (myDirection == East)
-				offset = 0.1;
-			else
-			{
-				myDirection = West;
-				offset = (x - 0.9);
-			}
-		}
-		else if (y > 0.9)
-		{
-			cout << "Y is greater than 0.9\n";
-
-			if (myDirection == North)
-				offset = -(y + 0.9);
-			else if (myDirection == South)
-				offset = 0.1;
-			else
-			{
-				myDirection = North;
-				offset = -(y + 0.9);
-			}
-		}
-		else if (y < -0.8)
-		{
-			cout << "Y is less than -0.8\n";
-
-			if (myDirection == North)
-				offset = 0.1;
-			else if (myDirection == South)
-				offset = (y - 1.0);
-			else
-			{
-				myDirection = South;
-				offset = (y - 1.0);
-			}
-		}
 		
 		snake[0].move(myDirection, offset);
+		checkBounds();
 		snake[0].getLocation(newX, newY);
 
 		cout << "Head Position (" << newX << ", " << newY << ")\n";
@@ -231,54 +220,29 @@ public:
 			x = newX;
 			y = newY;
 		}
-<<<<<<< HEAD
-
-	
-=======
->>>>>>> origin/master
+		changedDirection = false;
 	}
 	Square getHead()
 	{
 		return snake[0];
 	}
-	bool checkBounds()
-	{
-		double x;
-		double y;
-
-		snake[0].getLocation(x, y);
-
-		if (x >= 0.9 || x <= -0.8)
-		{
-			if (x >= 1.0)
-				direct = East;
-			else
-				direct = West;
-
-			return false;
-		}
-		else if (y >= 0.9 || y <= -0.8)
-		{
-			if (y >= 1.0)
-				direct = North;
-			else
-				direct = South;
-			return false;
-		}
-		else
-			return true;
-	}
+	
 	Direction getDirection()
 	{
 		return direct;
 	}
 	void setDirection(Direction d)
 	{
+		if (changedDirection)
+			return;
+
+		//checkBounds();
 
 		if ((direct == North && d == South) || (direct == South && d == North)
 			|| (direct == West && d == East) || (direct == East && d == West))
 			return;
 		direct = d;
+		changedDirection = true;
 	}
 	
 	// Traverse through the vector and see if any of them contains the square

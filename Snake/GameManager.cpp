@@ -27,10 +27,10 @@ void GameManager::changeDirection()
 	{
 		switch (keyboard)
 		{
-		case 'w': /* code here */ break;
-		case 's': /* code here */ break;
-		case 'a': /* code here */ break;
-		case 'd': /* code here */ break;
+		case 'w': snake1.setDirection(North); break;
+		case 's': snake1.setDirection(West); break;
+		case 'a': snake1.setDirection(East); break;
+		case 'd': snake1.setDirection(South); break;
 		}
 	}
 	else if (turn == Player2)												// snake2
@@ -72,9 +72,10 @@ void GameManager::runSingle()
 {
 	snake1.draw();
 	count++;
-	snake1.grow();
+	//snake1.grow();
 	if (count >= speed)
 	{
+		//cout << "I'm going in if statement to make move\n";
 			snake1.move(snake1.getDirection());
 
 			/*if (woah.isThereCollision(snake1.getHead()))
@@ -90,15 +91,7 @@ void GameManager::runSingle()
 	if (snake1.isThereCollision(snake1.getHead(), true)) {
 		status = GameOver;
 	}
-	switch (keyboard) {
-	case 27: exit(0);
-	case 'w': snake1.setDirection(North); break;
-	case 'a': snake1.setDirection(West); break;
-	case 'd': snake1.setDirection(East); break;
-	case 's': snake1.setDirection(South); break;
-	default: std::cout << "No support for this key\n";
 
-	}
 }
 
 void GameManager::runTwoPlayer()
