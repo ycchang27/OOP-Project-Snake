@@ -32,11 +32,9 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 	tests[3].move(East, 0.3);
 	*/
 	
-<<<<<<< HEAD
-	speed = 500;
-=======
-	speed = 10;
->>>>>>> origin/master
+
+	speed = 2500;
+
 	count = 0;
 	// END TESTING
 }
@@ -77,10 +75,10 @@ void App::draw() {
 	*/
 	snake1.draw();
 	//woah.draw();
-	cout << count << endl;
+	//cout << count << endl;
 	if (count >= speed)
 	{
-		cout << "here" << endl;
+		//cout << "here" << endl;
 
 		if (!stopMove)
 		{
@@ -139,6 +137,9 @@ void App::keyPress(unsigned char key) {
         // Exit the app when Esc key is pressed
         exit(0);
     }
+
+	if (key == 32)
+		stopMove = !stopMove;
 
 	if (!snake1.checkBounds())
 	return;
