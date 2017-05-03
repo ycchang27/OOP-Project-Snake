@@ -48,6 +48,9 @@ public:
 		snake.push_back(Square(0.0,-0.1));
 		snake.push_back(Square(0.0, -0.2));
 		direct = North;
+		this->r = r;
+		this->g = g;
+		this->b = b;
 	
 	}
 
@@ -112,12 +115,12 @@ public:
 		// check if location is valid first before putting in
 		snake.push_back(Square(x, y));
 
-		cout << "Snake growing with (" << x << ", " << y << ")\n";
+	//	cout << "Snake growing with (" << x << ", " << y << ")\n";
 
 		for (int i = 0; i < snake.size(); i++)
 		{
 			snake[i].getLocation(x, y);
-			cout << "Body part at (" << x << ", " << y << ")\n";
+		//	cout << "Body part at (" << x << ", " << y << ")\n";
 		}
 	}
 
@@ -228,8 +231,11 @@ public:
 			x = newX;
 			y = newY;
 		}
+<<<<<<< HEAD
 
 	
+=======
+>>>>>>> origin/master
 	}
 	Square getHead()
 	{

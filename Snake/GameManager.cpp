@@ -47,32 +47,58 @@ void GameManager::changeDirection()
 
 void GameManager::setupSingle()
 {
-	Snake snake1(0.0,0.0,0,1,0);
-	Fruit fruit(1.0,1.0,1,0,1); 
+	snake1 = Snake(1.0,1.0,0,1,0);
+	fruit = Fruit(1.0,1.0,1,0,1); 
 	ScoreKeeper score;
 	Player Player1;
 }
 
 void GameManager::setupTwoPlayer()
 {
-	Snake snake1(0.2, 0.2, 0, 1, 0);
+	/*Snake snake1;
 	Fruit fruit(1.0, 1.0, 1, 0, 1);
-	Snake snake2(-0.2, -0.2, 0, 1, 0);
+	Snake snake2(-0.2, -0.2, 0, 1, 0);*/
 
 }
 
 void GameManager::setupAI()
 {
-	Snake snake1(0.2, 0.2, 0, 1, 0);
-	Fruit fruit(1.0, 1.0, 1, 0, 1);
-	Snake snake2(-0.2, -0.2, 0, 1, 0);
+	//Snake snake1(0.2, 0.2, 0.0, 1, 0);
+	//Fruit fruit(1.0, 1.0, 1, 0, 1);
+	//Snake snake2(-0.2, -0.2, 0, 1, 0);
 }
 
 void GameManager::runSingle()
 {
-	snake1.move(snake1_direction);
-	snake1.isThereCollision(snake1.getHead() , true);
+	snake1.draw();
+	count++;
+	snake1.grow();
+	if (count >= speed)
+	{
+			snake1.move(snake1.getDirection());
 
+			/*if (woah.isThereCollision(snake1.getHead()))
+			{
+			snake1.grow();
+			}*/
+			snake1.isThereCollision(snake1.getHead(), true);
+			//std::cout << "Snake is moving\n";
+
+		count = 0;
+	}
+
+	if (snake1.isThereCollision(snake1.getHead(), true)) {
+		status = GameOver;
+	}
+	switch (keyboard) {
+	case 27: exit(0);
+	case 'w': snake1.setDirection(North); break;
+	case 'a': snake1.setDirection(West); break;
+	case 'd': snake1.setDirection(East); break;
+	case 's': snake1.setDirection(South); break;
+	default: std::cout << "No support for this key\n";
+
+	}
 }
 
 void GameManager::runTwoPlayer()
@@ -152,6 +178,7 @@ void GameManager::displayMenu()
 	cout << "Note: Scoring system only applies to Single Player Game.\n";
 
 	// Apply user response (not terminal)
+	
 	switch (keyboard)
 	{
 	case '1': mode = SinglePlayerMode; break;								// Single player mode
