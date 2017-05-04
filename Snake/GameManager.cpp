@@ -70,7 +70,7 @@ void GameManager::setupAI()
 
 void GameManager::runSingle()
 {
-	snake1.draw();
+
 	count++;
 	//snake1.grow();
 	if (count >= speed)
@@ -81,8 +81,8 @@ void GameManager::runSingle()
 			/*if (woah.isThereCollision(snake1.getHead()))
 			{
 			snake1.grow();
-			}*/
-			snake1.isThereCollision(snake1.getHead(), true);
+			}*/				
+		
 			//std::cout << "Snake is moving\n";
 
 		count = 0;
@@ -91,6 +91,12 @@ void GameManager::runSingle()
 	if (snake1.isThereCollision(snake1.getHead(), true)) {
 		status = GameOver;
 	}
+	else if (fruit.isThereCollision(snake1.getHead())) {
+		snake1.grow();
+
+		cout << "collide" << endl;
+	}
+	snake1.draw();
 
 }
 

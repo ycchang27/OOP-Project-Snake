@@ -135,12 +135,12 @@ void App::draw() {
 	glDisable(GL_TEXTURE_2D);
 	*/
 	Fruit fruit;
-	double fx = (rand() % 8) / 10.0 + (-17 / 100.0);
-	double fy = (rand() % 8) / 10.0 + (-17 / 100.0);
-	srand(time(NULL));
+	/*double fx = (rand() % 8) / 10.0 + (-17 / 100.0);
+	double fy = (rand() % 8) / 10.0 + (-17 / 100.0);*/
+	/*srand(time(NULL));
 	cout << fixed;
-	cout << setprecision(.1);
-	fruit = Fruit(fx, fy, 0, 0, 1);
+	cout << setprecision(.1);*/
+	fruit = Fruit(.1, .1, 0, 0, 1);
 	fruit.draw();
 
     // We have been drawing everything to the back buffer
