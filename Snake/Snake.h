@@ -200,7 +200,7 @@ public:
 		checkBounds();
 		snake[0].getLocation(newX, newY);
 
-		cout << "Head Position (" << newX << ", " << newY << ")\n";
+	/*	cout << "Head Position (" << newX << ", " << newY << ")\n";
 		cout << "Offset = " << offset << "\n";
 		if (myDirection == East)
 			std::cout << "Direction = East\n";
@@ -210,7 +210,7 @@ public:
 			std::cout << "Direction = North\n";
 		else if (myDirection == South)
 			std::cout << "Direction = South\n";
-		std::cout << "---------------------------------------------------\n";
+		std::cout << "---------------------------------------------------\n";*/
 
 		for (int i = 1; i < snake.size(); i++)
 		{

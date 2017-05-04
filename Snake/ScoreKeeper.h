@@ -151,7 +151,7 @@ public:
 	// Increase the current score by 1 point
 	void increaseScore()
 	{
-		++current_score;
+		current_score += 1000;
 	}
 
 	unsigned int getCurrentScore()

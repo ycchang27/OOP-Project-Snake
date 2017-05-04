@@ -1,4 +1,6 @@
 #include "GameManager.h"
+#include <iomanip>
+#include <random>
 
 GameManager::GameManager()
 {
@@ -7,6 +9,7 @@ GameManager::GameManager()
 	status = StandBy;
 	keyboard = 'x';
 	special_keyboard = -1;
+	
 }
 
 void GameManager::AIDecision()
@@ -48,7 +51,7 @@ void GameManager::changeDirection()
 void GameManager::setupSingle()
 {
 	snake1 = Snake(1.0,1.0,0,1,0);
-	fruit = Fruit(1.0,1.0,1,0,1); 
+	fruit = Fruit(0.1,0.1,1,0,1); 
 	ScoreKeeper score;
 	Player Player1;
 }
@@ -71,12 +74,43 @@ void GameManager::setupAI()
 void GameManager::runSingle()
 {
 
+	srand(time(NULL));
+
+	double fx = ((double)(rand() % 15 - 8) / 10);
+	double fy = ((double)(rand() % 15 - 7) / 10);
+
+
 	count++;
 	//snake1.grow();
+	fruit.draw();
+
 	if (count >= speed)
 	{
 		//cout << "I'm going in if statement to make move\n";
 			snake1.move(snake1.getDirection());
+
+			if (snake1.isThereCollision(snake1.getHead(), true)) {
+				if (score.isTop10()) {
+					string highperson;
+
+					cout << "HIGH SCORE " << endl;
+					cout << "Enter Name: ";
+					cin >> highperson;
+					score.save(highperson);
+				}
+				status = GameOver;
+			}
+			else if (fruit.isThereCollision(snake1.getHead())) {
+				snake1.grow();
+			
+				fruit = Fruit((fx), (fy), 1, 0, 1);
+
+				score.increaseScore();
+
+				cout << "current score is " << score.getCurrentScore() << endl;
+
+			}
+
 
 			/*if (woah.isThereCollision(snake1.getHead()))
 			{
@@ -84,19 +118,14 @@ void GameManager::runSingle()
 			}*/				
 		
 			//std::cout << "Snake is moving\n";
+			
 
 		count = 0;
 	}
 
-	if (snake1.isThereCollision(snake1.getHead(), true)) {
-		status = GameOver;
-	}
-	else if (fruit.isThereCollision(snake1.getHead())) {
-		snake1.grow();
-
-		cout << "collide" << endl;
-	}
+	
 	snake1.draw();
+
 
 }
 
