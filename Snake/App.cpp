@@ -1,4 +1,9 @@
 #include "App.h"
+#include <stdio.h>      /* printf, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
+#include <iostream>
+#include <iomanip>
 
 bool stopMove;
 App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w, h){
@@ -18,6 +23,7 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
     background = new TexRect(-1, 1, 2, 2);
     painting = new TexRect(0, 0.67, 0.5, 0.67);
 	stopMove = false;
+	
 	//woah = Fruit(0.1,0.5,1.0,0.0,0.0);
 	// TEST YOUR CODE HERE:
 	/*
@@ -128,6 +134,14 @@ void App::draw() {
 
 	glDisable(GL_TEXTURE_2D);
 	*/
+	Fruit fruit;
+	double fx = (rand() % 8) / 10.0 + (-17 / 100.0);
+	double fy = (rand() % 8) / 10.0 + (-17 / 100.0);
+	srand(time(NULL));
+	cout << fixed;
+	cout << setprecision(.1);
+	fruit = Fruit(fx, fy, 0, 0, 1);
+	fruit.draw();
 
     // We have been drawing everything to the back buffer
     // Swap the buffers to see the result of what we drew

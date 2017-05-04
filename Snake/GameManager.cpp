@@ -28,9 +28,9 @@ void GameManager::changeDirection()
 		switch (keyboard)
 		{
 		case 'w': snake1.setDirection(North); break;
-		case 's': snake1.setDirection(West); break;
-		case 'a': snake1.setDirection(East); break;
-		case 'd': snake1.setDirection(South); break;
+		case 'a': snake1.setDirection(West); break;
+		case 'd': snake1.setDirection(East); break;
+		case 's': snake1.setDirection(South); break;
 		}
 	}
 	else if (turn == Player2)												// snake2
