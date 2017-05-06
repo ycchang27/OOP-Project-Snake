@@ -162,8 +162,8 @@ void GameManager::runTwoPlayer()
 	
 
 
-	if (((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05) {
-			snake1.move(snake1.getDirection());
+	if ((((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05) ) {
+		snake1.move(snake1.getDirection());
 
 			if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), false)) {
 				cout << "Player 2 wins" << endl;
@@ -180,7 +180,7 @@ void GameManager::runTwoPlayer()
 		// code here...
 			snake2.move(snake2.getDirection());
 
-			if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false)) {
+			if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false) && status != GameOver) {
 				cout << "Player 1 wins" << endl;
 
 				status = GameOver;
@@ -220,7 +220,7 @@ void GameManager::runAI()
 
 	cout << rand_num;
 	
-	if (((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05) {
+	if ((((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05)) {
 		snake1.move(snake1.getDirection());
 
 		switch (rand_num)
@@ -248,7 +248,7 @@ void GameManager::runAI()
 	
 
 		
-		if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false)) {
+		if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false) && status != GameOver) {
 			cout << "You win" << endl;
 			status = GameOver;
 		}
