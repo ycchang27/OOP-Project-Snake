@@ -51,7 +51,7 @@ private:
 	{
 		// Find a place to insert
 		int index = 0;
-		for (auto it = score_list.begin(); it + 1 != score_list.end(); ++it)
+		for (auto it = score_list.begin(); it != score_list.end(); ++it)
 		{
 			if (*it < insertMe)
 				break;
@@ -59,10 +59,10 @@ private:
 		}
 
 		// Insert into vector
-		if (index == score_list.size() - 1)
+		if (index == score_list.size())
 			score_list.push_back(insertMe);
 		else
-			score_list.insert(score_list.begin() + index, insertMe);
+			score_list.insert(score_list.begin() + index -1, insertMe);
 	}
 	
 public:
@@ -114,7 +114,7 @@ public:
 		{
 			// Update score board
 			insert(Score(current_score, player_name));
-			
+
 			// Save the score here...
 			int n = score_list.size();
 			string insertMe = "";
@@ -144,17 +144,22 @@ public:
 	// Check if the current score belongs to top 10
 	bool isTop10()
 	{
-		return !(score_list.size() == 10 && current_score < lowest_score);
+		return !(score_list.size() == 10 && current_score <= lowest_score);
 	}
 
 	// Setter/Getter:
-	// Increase the current score by 1 point
+	// Increase the current score by 10 points
 	void increaseScore()
 	{
-		current_score += 1;
+		current_score += 10;
 	}
 
-	unsigned int getCurrentScore()
+	void resetScore()							// Reset score
+	{
+		current_score = 0;
+	}
+
+	unsigned int getCurrentScore()				// Get current score
 	{
 		return current_score;
 	}

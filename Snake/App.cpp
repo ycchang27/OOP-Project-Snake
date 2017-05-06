@@ -48,18 +48,18 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 }
 
 void App::idle() {
-	//redraw();
+	redraw();
 	
 	// Check whether it is the time to "run" or not
 	// ========================================Yun's code uncomment after testing===============================================
-	if (game.currentStatus() == GameOver || game.currentStatus() == StandBy || game.currentMode() == Menu || game.currentMode() == ScoreDisplay)
-		return;
-	else
-	{
-		if(game.currentMode() == AIMode)			// AI feature: AI always makes decide to turn each "run" (can face the same direction as previous one)
-			game.AIDecision();
-		redraw();									// run
-	}
+	//if (game.currentStatus() == GameOver || game.currentStatus() == StandBy || game.currentMode() == Menu || game.currentMode() == ScoreDisplay)
+	//	return;
+	//else
+	//{
+	//	if(game.currentMode() == AIMode)			// AI feature: AI always makes decide to turn each "run" (can face the same direction as previous one)
+	//		game.AIDecision();
+	//	redraw();									// run
+	//}
 	// =========================================================================================================================
 	
 }
@@ -118,16 +118,16 @@ void App::draw() {
 	
 	// END TESTING
 
-	/*
+	
 	// IGNORE THE FOLLOWING (Still being tested):
 	// Set Color
-	glColor3d(1.0, 1.0, 1.0);
+	/*glColor3d(1.0, 1.0, 1.0);
 
 
 	glBindTexture( GL_TEXTURE_2D, monalisa );
 	painting->draw();
-
-
+*/
+/*
 	glBindTexture( GL_TEXTURE_2D, wall );
 	background->draw();
 
@@ -148,9 +148,8 @@ void App::keyPress(unsigned char key) {
     //    exit(0);
     //}
 
-	if (key == 'x')
-		stopMove = !stopMove;
-
+	/*if (key == 'x')
+		stopMove = !stopMove;*/
 // ========================================Yun's code uncomment after testing===============================================
 	if (key == 27) // Exit the app when Esc key is pressed
 		exit(0);
@@ -160,6 +159,7 @@ void App::keyPress(unsigned char key) {
 		game.setTurn(Player1);
 		game.changeDirection();
 	}
+	redraw();
 // =========================================================================================================================
 
 

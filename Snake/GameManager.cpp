@@ -2,6 +2,26 @@
 #include <iomanip>
 #include <random>
 
+// Helper methods:
+double aspect_ratio = 0;
+void reshape(int w, int h)
+{
+	aspect_ratio = (double)w / (double)h;
+	glViewport(0, 0, w, h);
+}
+
+void output(GLfloat x, GLfloat y, char* text)
+{
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	glScalef(1 / 1000.0, 1 / 1000.0, 1 / 1000.0);
+	for (char* p = text; *p; p++)
+	{
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, *p);
+	}
+	glPopMatrix();
+}
+
 GameManager::GameManager()
 {
 	// code here...	
@@ -10,6 +30,8 @@ GameManager::GameManager()
 	keyboard = 'x';
 	special_keyboard = -1;
 	t = clock();
+	background = Square(-1.0, 1.0);
+	background.setToBackgroundSize();
 }
 
 void GameManager::AIDecision()
@@ -51,13 +73,14 @@ void GameManager::changeDirection()
 void GameManager::setupSingle()
 {
 	srand(time(NULL));
-
+	score = ScoreKeeper();
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
-	snake1 = Snake(0,0,0,1,0);
+	snake1 = Snake(0,0,0,1,0, loadTexture("../DIO.bmp"));
 	fruit = Fruit(fx,fy,1,0,1); 
 	ScoreKeeper score;
 	Player Player1;
+	texture = loadTexture("../game.bmp");
 }
 
 void GameManager::setupTwoPlayer()
@@ -66,9 +89,9 @@ void GameManager::setupTwoPlayer()
 
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
-	snake1 = Snake(0.5, 0.5, 1, 1, 0);
+	snake1 = Snake(0.5, 0.5, 1, 1, 0, loadTexture("../DIO.bmp"));
 	fruit = Fruit(fx, fy, 1, 0, 1);
-	snake2 = Snake(-0.5, -0.5, 0, 1, 0);
+	snake2 = Snake(-0.5, -0.5, 0, 1, 0, loadTexture("../DIO.bmp"));
 
 }
 
@@ -78,14 +101,13 @@ void GameManager::setupAI()
 
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
-	snake1 = Snake(0.5, 0.5, 0, 1, 1);
+	snake1 = Snake(0.5, 0.5, 0, 1, 1, loadTexture("../DIO.bmp"));
 	fruit = Fruit(fx, fy, 1, 0, 1);
-	snake2 = Snake(-0.5, -0.5, 1, 0, 0);
+	snake2 = Snake(-0.5, -0.5, 1, 0, 0, loadTexture("../DIO.bmp"));
 }
 
 void GameManager::runSingle()
 {
-
 	srand(time(NULL));
 
 	double fx = ((double)(rand() % 15 - 8) / 10);
@@ -98,37 +120,15 @@ void GameManager::runSingle()
 
 	if (((float)(clock() - t))/CLOCKS_PER_SEC > 0.05)
 	{
-		//cout << "I'm going in if statement to make move\n";
 			snake1.move(snake1.getDirection());
 
 			if (snake1.isThereCollision(snake1.getHead(), true) ) {
-				if (score.isTop10()) {
-					string highperson;
-
-					cout << "HIGH SCORE " << endl;
-					cout << "Enter Name: ";
-					cin >> highperson;
-					score.save(highperson);
-
-					if (keyboard == ' ')
-					{
-						mode = Menu;
-						return;
-					}
-				}
 				status = GameOver;
-
-
 			}
 			else if (fruit.isThereCollision(snake1.getHead())) {
 				snake1.grow();
-			
 				fruit = Fruit((fx), (fy), 1, 0, 1);
-
 				score.increaseScore();
-
-				cout << "current score is " << score.getCurrentScore() << endl;
-
 			}
 
 
@@ -143,11 +143,33 @@ void GameManager::runSingle()
 		count = 0;
 		t = clock();
 	}
-
 	
 	snake1.draw();
-
-
+	// Display game background
+	glColor3d(0.0, 0.0, 0.0);						// Set the color
+	char c;
+	string line = "";
+	int tempscore = score.getCurrentScore();
+	if (tempscore == 0)
+	{
+		c = 48;
+		line = c + line;
+	}
+	else
+	{
+		while (tempscore / 10 != 0 || tempscore % 10 != 0)
+		{
+			c = (tempscore % 10) + 48;
+			line = c + line;
+			tempscore /= 10;
+		}
+	}
+	char* temp;
+	temp = new char[line.size() + 1];
+	strcpy(temp, line.c_str());
+	output(0.3, -0.8, temp);
+	glColor3d(1.0, 1.0, 1.0);						// Set the color
+	background.textureDraw(texture);
 }
 
 void GameManager::runTwoPlayer()
@@ -271,7 +293,9 @@ void GameManager::runAI()
 
 void GameManager::run()
 {
-	if (status == GameOver || (status == StandBy && keyboard != ' '))		// Does nothing if the game is over or is on standby (space bar is required to finish)
+	if (status == GameOver)													// Does nothing if the game is over
+		return;
+	if (status == StandBy && keyboard != ' ')								// Does nothing if the game is over or is on standby (space bar is required to finish)
 	{
 		resetInput();														// Reset user input
 		return;
@@ -294,7 +318,44 @@ void GameManager::end()
 {
 	if (mode == SinglePlayerMode)											// SinglePlayerMode ending
 	{
-		// code here...
+		if (score.isTop10())
+			receiveName();
+		else
+		{
+			if (keyboard == 13)												// stops input when enter key is pressed (goes back to the menu)
+			{
+				mode = Menu;
+				status = StandBy;
+			}
+			else
+			{
+				char c;
+				string line = "";
+				int tempscore = score.getCurrentScore();
+				if (tempscore == 0)
+				{
+					c = 48;
+					line = c + line;
+				}
+				else
+				{
+					while (tempscore / 10 != 0 || tempscore % 10 != 0)
+					{
+						c = (tempscore % 10) + 48;
+						line = c + line;
+						tempscore /= 10;
+					}
+				}
+				char* temp = new char[line.size() + 1];
+				strcpy(temp, line.c_str());
+				glColor3d(0.0, 0.0, 0.0);									// Set the color
+				output(0.4, 0.1, temp);
+				output(-0.85, -0.6, "Enter key: return to menu");
+				glColor3d(1.0, 1.0, 1.0);									// Set the color
+				texture = loadTexture("../gameover_nohighscore.bmp");
+				background.textureDraw(texture);
+			}
+		}
 	}
 	else if (victory == Player1)											// Player1's victory
 	{
@@ -311,18 +372,85 @@ void GameManager::end()
 	resetInput();															// Reset user input
 }
 
+void GameManager::receiveName()
+{
+	int size = player_name.size();
+	if (keyboard == 13)									// stops input when enter key is pressed (goes back to the menu)
+	{
+		mode = Menu;
+		status = StandBy;
+		score.save(player_name);
+		score.resetScore();
+		player_name.erase();
+		score = ScoreKeeper();
+		return;
+	}
+	else if ((keyboard == 127 || keyboard == 8) && size != 0)
+	{
+		player_name.erase(player_name.end() - 1);
+		resetInput();
+	}
+	glColor3d(0.0, 0.0, 0.0);						// Set the color
+	// display UI
+	double startx = -0.95, starty = -0.1;				// determine where to start printing
+	glLineWidth(2.0);									// line length = 2
+	startx = -0.95;
+	output(startx, starty, "Name:");
+	starty -= 0.15;										// next line
+	output(startx, starty, "(No more than 10 chars)");
+	starty -= 0.15;										// next line
+
+	// receive input
+	if (keyboard != '\0' && size <= 10)
+	{
+		player_name += keyboard;
+		cout << player_name << endl;
+	}
+
+	// display current input
+	char* temp;
+	temp = new char[player_name.size() + 1];
+	strcpy(temp, player_name.c_str());
+	output(startx, starty, temp);
+	starty = -0.6;
+	output(startx, starty, "Enter key: return to menu");
+
+	// display background
+	char c;
+	string line = "";
+	int tempscore = score.getCurrentScore();
+	if (tempscore == 0)
+	{
+		c = 48;
+		line = c + line;
+	}
+	else
+	{
+		while (tempscore / 10 != 0 || tempscore % 10 != 0)
+		{
+			c = (tempscore % 10) + 48;
+			line = c + line;
+			tempscore /= 10;
+		}
+	}
+	temp = new char[line.size() + 1];
+	strcpy(temp, line.c_str());
+	output(0.4, 0.1, temp);
+
+	glColor3d(1.0, 1.0, 1.0);						// Set the color
+	texture = loadTexture("../gameover_highscore.bmp");
+	background.textureDraw(texture);
+
+	glEnd();
+}
+
 void GameManager::displayMenu()
 {
 	// Display menu
-	cout << "\t\t***Game menu***\n";
-	cout << "Press 1 for Single Player Game\n";
-	cout << "Press 2 for Two Player Game\n";
-	cout << "Press 3 for Player vs AI Game\n";
-	cout << "Press 4 for High Score Display\n";
-	cout << "Note: Scoring system only applies to Single Player Game.\n";
+	texture = loadTexture("../menu.bmp");
+	background.textureDraw(texture);
 
 	// Apply user response (not terminal)
-	
 	switch (keyboard)
 	{
 	case '1': mode = SinglePlayerMode; break;								// Single player mode
@@ -353,10 +481,57 @@ void GameManager::displayScoreboard()
 	score.display(displayMe);
 
 	// Display the scoreboard
-	cout << "\t\t***Top 10 scores***\n";
-	for (int i = 0; i < displayMe.size(); ++i)
-		cout << displayMe[i].score << "\t:" << displayMe[i].player_name << endl;
-	cout << "Press space bar to return to the menu\n";
+	double startx = -0.95, starty = 0.85;				// determine where to start printing
+	glColor3d(255, 255, 255);							// text color = white
+	glLineWidth(2.0);									// line length = 2
+	startx = -0.95;
+	output(startx, starty, "Name");
+	startx = 0.2;
+	output(startx, starty, "|");
+	startx = 0.3;
+	output(startx, starty, "Score");
+	startx = -0.95;
+	starty -= 0.15;										// next line
+	output(startx, starty, "------------------");
+	starty -= 0.15;
 
+	// Print scores
+	string line;
+	char *temp;
+	char c;
+	for (int i = 0; i < displayMe.size(); ++i)
+	{
+		if (i == 9)										// # 10 case
+			line = "10";
+		else											// everything else
+		{
+			c = i + 49;
+			line = c;
+		}
+		temp = new char[line.size() + 1];
+		strcpy(temp, line.c_str());
+		output(startx, starty, temp);
+
+		startx = -0.8;
+		line = ") " + displayMe[i].player_name;
+		temp = new char[line.size() + 1];
+		strcpy(temp, line.c_str());
+		output(startx, starty, temp);
+
+		startx = 0.2;
+		output(startx, starty, "|");
+
+		startx = 0.3;
+		line = to_string(displayMe[i].score);
+		temp = new char[line.size() + 1];
+		strcpy(temp, line.c_str());
+		output(startx, starty, temp);
+
+		starty -= 0.15;
+		startx = -0.95;									// next line
+	}
+	startx = -0.95;
+	output(startx, starty, "Space bar: Return to menu");
+	glEnd();
 	resetInput();
 }

@@ -24,4 +24,7 @@ enum Player { Player1, Player2, AI };
 // Square side
 #define SQUARE_SIDE 0.1
 
+// Background side
+#define BACKGROUND_SIDE 2.0
+
 #endif //_CONFIG_H

@@ -47,18 +47,24 @@ private:
 	unsigned char keyboard;				// handles general input
 	int special_keyboard;				// handles special input
 
+	// Speed of the game
 	int speed = 5;
 	int count = 0;
-
 	clock_t t;
 
+	// Background
+	Square background;
+	GLuint texture;
+
+	// Player name
+	string player_name = "";
 
 public:
 	// Constructor:
 	//	- Define some private variables to default (other variables are defined later):
 	//	- mode: Initially on Menu mode
 	//	- status: Initially on StandBy mode
-	//	- keyboard: Initially 'x'
+	//	- keyboard: Initially '\0'
 	//	- special_keyboard: Initially -1
 	GameManager();
 
@@ -81,7 +87,7 @@ private:
 
 	// Setter...
 	// Reset the user input
-	void resetInput() { keyboard = 'x'; special_keyboard = -1; }
+	void resetInput() { keyboard = '\0'; special_keyboard = -1; }
 
 	
 	// Initialization ("Constructor")...
@@ -152,6 +158,30 @@ private:
 	//		* WALL: set status to GameOver
 	//		* SNAKE: set status to GameOver and set victory to Player1
 	void runAI();
+
+	// Test (User input)
+	void receiveName();
+
+	// Load texture
+	GLuint loadTexture(const char *filename) {
+		GLuint texture_id;
+		glClearColor(0.0, 0.0, 0.0, 0.0);
+		glShadeModel(GL_FLAT);
+		glEnable(GL_DEPTH_TEST);
+
+		RgbImage theTexMap(filename);
+
+		// Pixel alignment: each row is word aligned (aligned to a 4 byte boundary)
+		//    Therefore, no need to call glPixelStore( GL_UNPACK_ALIGNMENT, ... );
+
+		glGenTextures(1, &texture_id);
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, theTexMap.GetNumCols(), theTexMap.GetNumRows(),
+			GL_RGB, GL_UNSIGNED_BYTE, theTexMap.ImageData());
+
+		return texture_id;
+	}
 
 public:
 	// Public methods:

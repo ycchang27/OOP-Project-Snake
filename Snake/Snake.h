@@ -1,6 +1,6 @@
 /*
 	Author: Yun Chul Chang
-	Editor(s): Yun Chul Chang, David Cabral, Edwin Ramirez
+	Editor(s): Yun Chul Chang, David Cabral, Edwin Ramirez, Jose Sandoval
 	Purpose: Represent a snake object
 */
 
@@ -8,6 +8,7 @@
 #define _SNAKE_H
 
 #include "Square.h"
+#include "RgbImage.h"
 #include <vector>
 #include <algorithm>
 
@@ -27,6 +28,8 @@ private:
 	Direction direct;
 
 	bool changedDirection;
+
+	GLuint texture;
 
 	void checkBounds()
 	{
@@ -69,6 +72,7 @@ private:
 		}
 
 	}
+
 public:
 	// Constructors:
 	Snake() 
@@ -81,11 +85,11 @@ public:
 		g = 1;
 		b = 1;
 		changedDirection = false;
-	}			// does nothing
+	}
 
 	// Insert 3 squares into the vector (head, body, and tail)
 	// The square has already-defined side length 0.1
-	Snake(double x, double y, double r, double g, double b)
+	Snake(double x, double y, double r, double g, double b, GLuint head)
 	{
 		// code here...
 		snake.push_back(Square(x,y));
@@ -96,6 +100,8 @@ public:
 		this->g = g;
 		this->b = b;
 		changedDirection = false;
+
+		texture = head;
 	}
 
 	// Public methods:
@@ -281,11 +287,9 @@ public:
 	// For each square in the vector and call draw function. Read Square.h for more details
 	void draw()
 	{
-		// code here...
-		for (int i = 0; i < snake.size(); i++)
-		{
+		snake[0].textureDraw(texture);
+		for (int i = 1; i < snake.size(); i++)
 			snake[i].draw(r, g, b);
-		}
 	}
 };
 
