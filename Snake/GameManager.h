@@ -14,6 +14,8 @@
 #include <iomanip>
 #include <random>
 #include <time.h>
+#include <string>
+#include <iostream>
 
 class GameManager
 {

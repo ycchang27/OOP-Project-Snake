@@ -54,11 +54,11 @@ private:
 			}
 
 		}
-		else if (y > 1.0 || y < -0.9)
+		else if (y > 1.0 || y < -0.7)
 		{
 			if (y > 1.0)
 			{
-				y = -0.9;
+				y = -0.7;
 				snake[0].setLocation(x, y);
 				//direct = North;
 			}
