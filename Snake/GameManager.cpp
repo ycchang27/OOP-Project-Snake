@@ -9,7 +9,7 @@ GameManager::GameManager()
 	status = StandBy;
 	keyboard = 'x';
 	special_keyboard = -1;
-	
+	t = clock();
 }
 
 void GameManager::AIDecision()
@@ -96,7 +96,7 @@ void GameManager::runSingle()
 	//snake1.grow();
 	fruit.draw();
 
-	if (count >= speed)
+	if (((float)(clock() - t))/CLOCKS_PER_SEC > 0.05)
 	{
 		//cout << "I'm going in if statement to make move\n";
 			snake1.move(snake1.getDirection());
@@ -141,6 +141,7 @@ void GameManager::runSingle()
 			
 
 		count = 0;
+		t = clock();
 	}
 
 	
@@ -161,11 +162,10 @@ void GameManager::runTwoPlayer()
 	
 
 
-		if (count >= speed)
-		{
+	if (((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05) {
 			snake1.move(snake1.getDirection());
 
-			if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), true)) {
+			if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), false)) {
 				cout << "Player 2 wins" << endl;
 
 				status = GameOver;
@@ -175,16 +175,12 @@ void GameManager::runTwoPlayer()
 
 				fruit = Fruit((fx), (fy), 1, 0, 1);
 			}
-		}
-	
+			t = clock();
 
 		// code here...
-
-		if (count >= speed && status != GameOver)
-		{
 			snake2.move(snake2.getDirection());
 
-			if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), true)) {
+			if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false)) {
 				cout << "Player 1 wins" << endl;
 
 				status = GameOver;
@@ -194,7 +190,10 @@ void GameManager::runTwoPlayer()
 
 				fruit = Fruit((fx), (fy), 1, 0, 1);
 			}
-		}// code here...
+		
+			count = 0;
+			t = clock();
+	}// code here...
 
 
 		fruit.draw();
@@ -205,8 +204,11 @@ void GameManager::runTwoPlayer()
 
 void GameManager::runAI()
 {
+	srand(time(NULL));
+	int rand_num = rand() % 4;
 
-	time_t t;
+	
+	time_t t_2;
 
 	srand(time(NULL));
 
@@ -214,33 +216,13 @@ void GameManager::runAI()
 	double fy = ((double)(rand() % 15 - 7) / 10);
 	count++;
 
-	int rand_num = rand() % 4;
 	fruit.draw();
 
 	cout << rand_num;
 	
-	if (count >= speed)
-	{
+	if (((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05) {
 		snake1.move(snake1.getDirection());
 
-		if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), true)) {
-			cout << "You lose" << endl;
-			status = GameOver;
-		}
-		else if (fruit.isThereCollision(snake1.getHead())) {
-			snake1.grow();
-
-			fruit = Fruit((fx), (fy), 1, 0, 1);
-		}
-	}
-
-
-	// code here...
-
-	if (count >= speed)
-	{
-	
-		srand((unsigned)time(&t));
 		switch (rand_num)
 		{
 		case 0: snake2.move(North); break;
@@ -249,16 +231,34 @@ void GameManager::runAI()
 		case 3: snake2.move(West); break;
 		}
 
+		if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), false)) {
+			cout << "You lose" << endl;
+			status = GameOver;
+		}
+		else if (fruit.isThereCollision(snake1.getHead())) {
+			snake1.grow();
+
+			fruit = Fruit((fx), (fy), 1, 0, 1);
+			
+		}
+
+		t = clock();
+
+	
+	
+
 		
-		if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), true)) {
+		if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false)) {
 			cout << "You win" << endl;
 			status = GameOver;
 		}
 		else if (fruit.isThereCollision(snake2.getHead())) {
 			snake2.grow();
-			fruit = Fruit((fx), (fy), 0, 1, 1);
+			fruit = Fruit((fx), (fy), 1, 0, 1);
+
 		}
 
+		t = clock();
 	}
 // code here...
 

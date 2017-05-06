@@ -13,6 +13,7 @@
 #include "GlutApp.h"
 #include <iomanip>
 #include <random>
+#include <time.h>
 
 class GameManager
 {
@@ -49,7 +50,7 @@ private:
 	int speed = 5;
 	int count = 0;
 
-	
+	clock_t t;
 
 
 public:
