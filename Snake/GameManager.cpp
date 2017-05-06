@@ -294,19 +294,31 @@ void GameManager::end()
 {
 	if (mode == SinglePlayerMode)											// SinglePlayerMode ending
 	{
-		// code here...
+		mode = Menu;
+		status = StandBy;
+		cout << "Press any key to go to menu"<<endl;
 	}
 	else if (victory == Player1)											// Player1's victory
 	{
-		// code here...
+		mode = Menu;
+		status = StandBy;
+		cout << "Press any key to go to menu"<<endl;
+
+
 	}
 	else if (victory == Player2)											// Player2's victory
 	{
-		// code here...
+		mode = Menu;
+		status = StandBy;
+		cout << "Press any key to go to menu"<<endl;
+
 	}
 	else																	// AI's victory
 	{
-		// code here...
+		mode = Menu;
+		status = StandBy;
+		cout << "Press any key to go to menu"<<endl;
+
 	}
 	resetInput();															// Reset user input
 }
