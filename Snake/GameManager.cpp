@@ -50,24 +50,36 @@ void GameManager::changeDirection()
 
 void GameManager::setupSingle()
 {
+	srand(time(NULL));
+
+	double fx = ((double)(rand() % 15 - 8) / 10);
+	double fy = ((double)(rand() % 15 - 7) / 10);
 	snake1 = Snake(0,0,0,1,0);
-	fruit = Fruit(0.1,0.1,1,0,1); 
+	fruit = Fruit(fx,fy,1,0,1); 
 	ScoreKeeper score;
 	Player Player1;
 }
 
 void GameManager::setupTwoPlayer()
 {
+	srand(time(NULL));
+
+	double fx = ((double)(rand() % 15 - 8) / 10);
+	double fy = ((double)(rand() % 15 - 7) / 10);
 	snake1 = Snake(0.5, 0.5, 1, 1, 0);
-	Fruit fruit(0.1, 0.1, 1, 0, 1);
+	fruit = Fruit(fx, fy, 1, 0, 1);
 	snake2 = Snake(-0.5, -0.5, 0, 1, 0);
 
 }
 
 void GameManager::setupAI()
 {
+	srand(time(NULL));
+
+	double fx = ((double)(rand() % 15 - 8) / 10);
+	double fy = ((double)(rand() % 15 - 7) / 10);
 	snake1 = Snake(0.5, 0.5, 0, 1, 1);
-	Fruit fruit(0.1, 0.1, 1, 0, 1);
+	fruit = Fruit(fx, fy, 1, 0, 1);
 	snake2 = Snake(-0.5, -0.5, 1, 0, 0);
 }
 
@@ -139,13 +151,12 @@ void GameManager::runSingle()
 
 void GameManager::runTwoPlayer()
 {
-
 	srand(time(NULL));
 
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
+	
 	count++;
-	fruit.draw();
 
 	
 
@@ -169,7 +180,7 @@ void GameManager::runTwoPlayer()
 
 		// code here...
 
-		if (count >= speed)
+		if (count >= speed && status != GameOver)
 		{
 			snake2.move(snake2.getDirection());
 
@@ -186,6 +197,7 @@ void GameManager::runTwoPlayer()
 		}// code here...
 
 
+		fruit.draw();
 
 	snake1.draw();
 	snake2.draw();
@@ -250,6 +262,7 @@ void GameManager::runAI()
 	}
 // code here...
 
+	fruit.draw();
 
 
 	snake1.draw();

@@ -11,6 +11,8 @@
 #include "Fruit.h"
 #include "ScoreKeeper.h"
 #include "GlutApp.h"
+#include <iomanip>
+#include <random>
 
 class GameManager
 {
@@ -46,6 +48,8 @@ private:
 
 	int speed = 5;
 	int count = 0;
+
+	
 
 
 public:
