@@ -40,17 +40,17 @@ void GameManager::changeDirection()
 	{
 		switch (special_keyboard)
 		{
-		case GLUT_KEY_LEFT:  /* code here */ break;
-		case GLUT_KEY_RIGHT: /* code here */ break;
-		case GLUT_KEY_UP:    /* code here */ break;
-		case GLUT_KEY_DOWN:  /* code here */ break;
+		case GLUT_KEY_LEFT: snake2.setDirection(West); break;
+		case GLUT_KEY_RIGHT:snake2.setDirection(East); break;
+		case GLUT_KEY_UP: snake2.setDirection(North); break;
+		case GLUT_KEY_DOWN: snake2.setDirection(South); break;
 		}
 	}
 }
 
 void GameManager::setupSingle()
 {
-	snake1 = Snake(1.0,1.0,0,1,0);
+	snake1 = Snake(0,0,0,1,0);
 	fruit = Fruit(0.1,0.1,1,0,1); 
 	ScoreKeeper score;
 	Player Player1;
@@ -58,17 +58,17 @@ void GameManager::setupSingle()
 
 void GameManager::setupTwoPlayer()
 {
-	/*Snake snake1;
-	Fruit fruit(1.0, 1.0, 1, 0, 1);
-	Snake snake2(-0.2, -0.2, 0, 1, 0);*/
+	snake1 = Snake(0.5, 0.5, 1, 1, 0);
+	Fruit fruit(0.1, 0.1, 1, 0, 1);
+	snake2 = Snake(-0.5, -0.5, 0, 1, 0);
 
 }
 
 void GameManager::setupAI()
 {
-	//Snake snake1(0.2, 0.2, 0.0, 1, 0);
-	//Fruit fruit(1.0, 1.0, 1, 0, 1);
-	//Snake snake2(-0.2, -0.2, 0, 1, 0);
+	snake1 = Snake(0.5, 0.5, 0, 1, 1);
+	Fruit fruit(0.1, 0.1, 1, 0, 1);
+	snake2 = Snake(-0.5, -0.5, 1, 0, 0);
 }
 
 void GameManager::runSingle()
@@ -89,7 +89,7 @@ void GameManager::runSingle()
 		//cout << "I'm going in if statement to make move\n";
 			snake1.move(snake1.getDirection());
 
-			if (snake1.isThereCollision(snake1.getHead(), true)) {
+			if (snake1.isThereCollision(snake1.getHead(), true) ) {
 				if (score.isTop10()) {
 					string highperson;
 
@@ -97,8 +97,16 @@ void GameManager::runSingle()
 					cout << "Enter Name: ";
 					cin >> highperson;
 					score.save(highperson);
+
+					if (keyboard == ' ')
+					{
+						mode = Menu;
+						return;
+					}
 				}
 				status = GameOver;
+
+
 			}
 			else if (fruit.isThereCollision(snake1.getHead())) {
 				snake1.grow();
@@ -131,26 +139,121 @@ void GameManager::runSingle()
 
 void GameManager::runTwoPlayer()
 {
-	if (turn == Player1)													// Player1's turn
-	{
+
+	srand(time(NULL));
+
+	double fx = ((double)(rand() % 15 - 8) / 10);
+	double fy = ((double)(rand() % 15 - 7) / 10);
+	count++;
+	fruit.draw();
+
+	
+
+
+		if (count >= speed)
+		{
+			snake1.move(snake1.getDirection());
+
+			if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), true)) {
+				cout << "Player 2 wins" << endl;
+
+				status = GameOver;
+			}
+			else if (fruit.isThereCollision(snake1.getHead())) {
+				snake1.grow();
+
+				fruit = Fruit((fx), (fy), 1, 0, 1);
+			}
+		}
+	
+
 		// code here...
-	}
-	else																	// Player2's turn
-	{
-		// code here...
-	}
+
+		if (count >= speed)
+		{
+			snake2.move(snake2.getDirection());
+
+			if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), true)) {
+				cout << "Player 1 wins" << endl;
+
+				status = GameOver;
+			}
+			else if (fruit.isThereCollision(snake2.getHead())) {
+				snake2.grow();
+
+				fruit = Fruit((fx), (fy), 1, 0, 1);
+			}
+		}// code here...
+
+
+
+	snake1.draw();
+	snake2.draw();
 }
 
 void GameManager::runAI()
 {
-	if (turn == Player1)													// Player1's turn
+
+	time_t t;
+
+	srand(time(NULL));
+
+	double fx = ((double)(rand() % 15 - 8) / 10);
+	double fy = ((double)(rand() % 15 - 7) / 10);
+	count++;
+
+	int rand_num = rand() % 4;
+	fruit.draw();
+
+	cout << rand_num;
+	
+	if (count >= speed)
 	{
-		// code here...
+		snake1.move(snake1.getDirection());
+
+		if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), true)) {
+			cout << "You lose" << endl;
+			status = GameOver;
+		}
+		else if (fruit.isThereCollision(snake1.getHead())) {
+			snake1.grow();
+
+			fruit = Fruit((fx), (fy), 1, 0, 1);
+		}
 	}
-	else																	// AI's turn
+
+
+	// code here...
+
+	if (count >= speed)
 	{
-		// code here...
+	
+		srand((unsigned)time(&t));
+		switch (rand_num)
+		{
+		case 0: snake2.move(North); break;
+		case 1: snake2.move(East); break;
+		case 2: snake2.move(South); break;
+		case 3: snake2.move(West); break;
+		}
+
+		
+		if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), true)) {
+			cout << "You win" << endl;
+			status = GameOver;
+		}
+		else if (fruit.isThereCollision(snake2.getHead())) {
+			snake2.grow();
+			fruit = Fruit((fx), (fy), 0, 1, 1);
+		}
+
 	}
+// code here...
+
+
+
+	snake1.draw();
+	snake2.draw();
 }
 
 void GameManager::run()

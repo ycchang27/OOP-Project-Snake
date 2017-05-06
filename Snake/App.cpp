@@ -184,12 +184,12 @@ void App::keyPress(unsigned char key) {
 void App::specialKeyPress(int key) {
 	// Accepts special keys only in TwoPlayerMode/AIMode
 	
-	/*if (game.currentMode() == TwoPlayerMode || game.currentMode() == AIMode)
+	if (game.currentMode() == TwoPlayerMode || game.currentMode() == AIMode)
 	{
 		game.receiveSpecialInput(key);
 		game.setTurn(Player2);
 		game.changeDirection();
-	}*/
+	}
 	
 }
 

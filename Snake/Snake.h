@@ -88,9 +88,9 @@ public:
 	Snake(double x, double y, double r, double g, double b)
 	{
 		// code here...
-		snake.push_back(Square());
-		snake.push_back(Square(0.0,-0.1));
-		snake.push_back(Square(0.0, -0.2));
+		snake.push_back(Square(x,y));
+		snake.push_back(Square(x,y-0.1));
+		snake.push_back(Square(x, y-0.2));
 		direct = North;
 		this->r = r;
 		this->g = g;
