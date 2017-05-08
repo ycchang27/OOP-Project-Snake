@@ -62,7 +62,7 @@ private:
 		if (index == score_list.size())
 			score_list.push_back(insertMe);
 		else
-			score_list.insert(score_list.begin() + index -1, insertMe);
+			score_list.insert(score_list.begin() + index, insertMe);
 	}
 	
 public:
