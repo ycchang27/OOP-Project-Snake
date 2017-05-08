@@ -73,14 +73,14 @@ void GameManager::changeDirection()
 void GameManager::setupSingle()
 {
 	srand(time(NULL));
-	score = ScoreKeeper();
+	score.resetScore();
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
 	snake1 = Snake(0,0,0,1,0, loadTexture("../profile_single.bmp"));
 	fruit = Fruit(fx,fy,1,0,1); 
-	ScoreKeeper score;
-	Player Player1;
-	texture = loadTexture("../gamedisplay_single.bmp");
+	turn = Player1;
+	texture = loadTexture("../difficulty_selection.bmp");
+	difficulty = NotInitialized;
 }
 
 void GameManager::setupTwoPlayer()
@@ -113,32 +113,31 @@ void GameManager::runSingle()
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
 
-
 	count++;
 	//snake1.grow();
 	fruit.draw();
 
-	if (((float)(clock() - t))/CLOCKS_PER_SEC > 0.05)
+	if (((float)(clock() - t))/CLOCKS_PER_SEC > game_speed)
 	{
-			snake1.move(snake1.getDirection());
+		snake1.move(snake1.getDirection());
 
-			if (snake1.isThereCollision(snake1.getHead(), true) ) {
-				status = GameOver;
-			}
-			else if (fruit.isThereCollision(snake1.getHead())) {
-				snake1.grow();
-				fruit = Fruit((fx), (fy), 1, 0, 1);
-				score.increaseScore();
-			}
-
-
-			/*if (woah.isThereCollision(snake1.getHead()))
-			{
+		if (snake1.isThereCollision(snake1.getHead(), true)) {
+			status = GameOver;
+		}
+		else if (fruit.isThereCollision(snake1.getHead())) {
 			snake1.grow();
-			}*/				
-		
-			//std::cout << "Snake is moving\n";
-			
+			fruit = Fruit((fx), (fy), 1, 0, 1);
+			score.increaseScore();
+		}
+
+
+		/*if (woah.isThereCollision(snake1.getHead()))
+		{
+		snake1.grow();
+		}*/
+
+		//std::cout << "Snake is moving\n";
+
 
 		count = 0;
 		t = clock();
@@ -166,19 +165,24 @@ void GameManager::runSingle()
 		}
 	}
 	char* temp;
-	line = "Score: " + line;
+	switch (difficulty)									// Display game difficulty
+	{
+	case Easy: line = "Level: Easy  Score: " + line; break;
+	case Intermediate: line = "Level: Normal  Score: " + line; break;
+	case Hard: line = "Level: Hard  Score: " + line; break;
+	}
 	temp = new char[line.size() + 1];
 	strcpy(temp, line.c_str());
-	output(-0.4, -0.95, temp);
+	output(-1, -0.95, temp);
 
 	// Draw Boundary line (to separate between score and the game)
 	glBegin(GL_LINES);								// Start drawing
 	glVertex2f(-1, -0.8);
 	glVertex2f(1 , -0.8);
 	glEnd();										// Stop drawing
-	glColor3d(1.0, 1.0, 1.0);						// Set the color
 
 	// Draw the background
+	glColor3d(1.0, 1.0, 1.0);						// Set the color
 	background.textureDraw(texture);
 }
 
@@ -305,13 +309,41 @@ void GameManager::run()
 {
 	if (status == GameOver)													// Does nothing if the game is over
 		return;
-	if (status == StandBy && keyboard != ' ')								// Does nothing if the game is over or is on standby (space bar is required to finish)
+	if (mode == SinglePlayerMode && difficulty == NotInitialized)			// Get user to choose the game difficulty
 	{
+		glColor3d(1.0, 1.0, 1.0);											// Set the color
+		background.textureDraw(texture);
+		if (keyboard == '\0')												// Invalid input
+		{
+			resetInput();													// Reset user input
+			return;
+		}
+		switch (keyboard)
+		{
+		case '1': difficulty = Easy; texture = loadTexture("../gamedisplay_single.bmp"); game_speed = 0.10; break;
+		case '2': difficulty = Intermediate; texture = loadTexture("../gamedisplay_single.bmp"); game_speed = 0.05; break;
+		case '3': difficulty = Hard; texture = loadTexture("../gamedisplay_single.bmp"); game_speed = 0.025; break;
+		}
+		score = ScoreKeeper(difficulty);									// Set up the score keeper
 		resetInput();														// Reset user input
 		return;
 	}
-	if (status == StandBy && keyboard == ' ')								// Start initializing and start the game if first time
-		status = InProgress;												// Start the game
+	if (status == StandBy)													// Does nothing if the game is on standby (space bar is required to finish)
+	{
+		char* temp;
+		string line = "Press space bar to start";
+		temp = new char[line.size() + 1];
+		strcpy(temp, line.c_str());
+		output(-0.8, 0, temp);
+		delete temp;
+		if (keyboard != ' ')
+		{
+			resetInput();														// Reset user input
+			return;
+		}
+		else
+			status = InProgress;												// Start the game
+	}
 
 	// Run/continue the game accordingly
 	switch (mode)
@@ -360,6 +392,7 @@ void GameManager::end()
 				strcpy(temp, line.c_str());
 				glColor3d(0.0, 0.0, 0.0);									// Set the color
 				output(0.4, 0.1, temp);
+				delete temp;
 				output(-0.85, -0.6, "Enter key: return to menu");
 				glColor3d(1.0, 1.0, 1.0);									// Set the color
 				texture = loadTexture("../gameover_nohighscore.bmp");
@@ -399,7 +432,7 @@ void GameManager::receiveName()
 	{
 		mode = Menu;
 		status = StandBy;
-		score.save(player_name);
+		score.save(player_name, difficulty);
 		score.resetScore();
 		player_name.erase();
 		score = ScoreKeeper();
@@ -422,16 +455,14 @@ void GameManager::receiveName()
 
 	// receive input
 	if (keyboard != '\0' && size <= 10)
-	{
 		player_name += keyboard;
-		cout << player_name << endl;
-	}
 
 	// display current input
 	char* temp;
 	temp = new char[player_name.size() + 1];
 	strcpy(temp, player_name.c_str());
 	output(startx, starty, temp);
+	delete temp;
 	starty = -0.6;
 	output(startx, starty, "Enter key: return to menu");
 
@@ -456,7 +487,7 @@ void GameManager::receiveName()
 	temp = new char[line.size() + 1];
 	strcpy(temp, line.c_str());
 	output(0.4, 0.1, temp);
-
+	delete temp;
 	glColor3d(1.0, 1.0, 1.0);						// Set the color
 	texture = loadTexture("../gameover_highscore.bmp");
 	background.textureDraw(texture);
@@ -476,7 +507,9 @@ void GameManager::displayMenu()
 	case '1': mode = SinglePlayerMode; break;								// Single player mode
 	case '2': mode = TwoPlayerMode; break;									// Two player mode
 	case '3': mode = AIMode; break;											// AI mode
-	case '4': mode = ScoreDisplay; resetInput(); return;					// Display scoreboard
+	case '4': mode = ScoreDisplayEasy; resetInput(); return;				// Display scoreboard (Easy)
+	case '5': mode = ScoreDisplayInt; resetInput(); return;					// Display scoreboard (Intermediate)
+	case '6': mode = ScoreDisplayHard; resetInput(); return;				// Display scoreboard (Hard)
 	default: resetInput(); return;											// Reset user input for invalid responses
 	}
 	switch (mode)
@@ -498,7 +531,7 @@ void GameManager::displayScoreboard()
 	}
 	// Get the scores from scorekeeper
 	vector<Score> displayMe;
-	score.display(displayMe);
+	score.display(displayMe, mode);
 
 	// Display the scoreboard
 	double startx = -0.95, starty = 0.85;				// determine where to start printing

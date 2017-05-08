@@ -73,10 +73,46 @@ public:
 	ScoreKeeper()
 	{
 		current_score = 0;					// Set current score to 0
-		file_reader.open("../score.txt");	// Attempt opening the file
+		//file_reader.open("../score.txt");	// Attempt opening the file
+		//if (file_reader.is_open())
+		//{
+		//	string line;
+		//	unsigned int score;
+		//	char* temp;
+
+		//	// Start reading the file here...
+		//	while (file_reader.good())
+		//	{
+		//		// Get the score (string to char* conversion is needed for atoi)
+		//		getline(file_reader, line, '|');
+		//		temp = new char[line.size() + 1];
+		//		strcpy(temp, line.c_str());
+		//		score = atoi(temp);
+
+		//		// Get the player name
+		//		getline(file_reader, line, '|');
+		//		score_list.push_back(Score(score, line));
+		//	}
+		//	lowest_score = score;			// Set the lowest score
+		//	file_reader.close();			// Close the file
+		//}
+		//else
+		//	cout << "Error: File not found.\n";		// Print error message
+	}
+	ScoreKeeper(GameDifficulty difficulty)
+	{
+		current_score = 0;					// Set current score to 0
+		// reset vector
+		score_list.clear();
+		// Assumes that d is already initialized
+		switch (difficulty)
+		{
+		case Easy: file_reader.open("../scoreE.txt"); break;			// Attempt opening the file
+		case Intermediate: file_reader.open("../scoreI.txt"); break;	// Attempt opening the file
+		case Hard: file_reader.open("../scoreH.txt"); break;			// Attempt opening the file
+		}
 		if (file_reader.is_open())
 		{
-			// Import into a priority queue here...
 			string line;
 			unsigned int score;
 			char* temp;
@@ -104,12 +140,19 @@ public:
 	// Public methods:
 
 	// Save the current score if the score is in top 10
-	void save(string player_name)
+	void save(string player_name, GameDifficulty difficulty)
 	{
 		this->player_name = player_name;	// Set the player_name
 
 		// Attempt updating the file
-		file_writer.open("../score.txt");
+		// Assumes that d is already initialized
+		switch (difficulty)
+		{
+		case Easy: file_writer.open("../scoreE.txt"); break;			// Attempt opening the file
+		case Intermediate: file_writer.open("../scoreI.txt"); break;	// Attempt opening the file
+		case Hard: file_writer.open("../scoreH.txt"); break;			// Attempt opening the file
+		default: cout << "Error: Difficulty is invalid" << endl;
+		}
 		if (file_writer.is_open())
 		{
 			// Update score board
@@ -136,8 +179,41 @@ public:
 	}
 
 	// Fill the vector with vector's Score
-	void display(vector<Score> &fillMe)
+	void display(vector<Score> &fillMe, GameMode difficulty)
 	{
+		// reset vector
+		score_list.clear();
+		// Assumes that d is already initialized
+		switch (difficulty)
+		{
+		case ScoreDisplayEasy: file_reader.open("../scoreE.txt"); break;			// Attempt opening the file
+		case ScoreDisplayInt: file_reader.open("../scoreI.txt"); break;	// Attempt opening the file
+		case ScoreDisplayHard: file_reader.open("../scoreH.txt"); break;			// Attempt opening the file
+		}
+		if (file_reader.is_open())
+		{
+			string line;
+			unsigned int score;
+			char* temp;
+
+			// Start reading the file here...
+			while (file_reader.good())
+			{
+				// Get the score (string to char* conversion is needed for atoi)
+				getline(file_reader, line, '|');
+				temp = new char[line.size() + 1];
+				strcpy(temp, line.c_str());
+				score = atoi(temp);
+
+				// Get the player name
+				getline(file_reader, line, '|');
+				score_list.push_back(Score(score, line));
+			}
+			lowest_score = score;			// Set the lowest score
+			file_reader.close();			// Close the file
+		}
+		else
+			cout << "Error: File not found.\n";		// Print error message
 		fillMe = vector<Score>(score_list);
 	}
 

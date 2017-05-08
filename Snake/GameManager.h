@@ -33,6 +33,14 @@ private:
 	//	- Only used in SinglePlayerMode
 	ScoreKeeper score;
 
+	// GameDifficulty
+	//	- Only used in SinglePlayerMode
+	GameDifficulty difficulty;
+
+	// Game speed
+	//	- Only used in SinglePlayerMode
+	double game_speed;
+
 	// Victory/Turn
 	Player victory, turn;
 
@@ -101,6 +109,7 @@ private:
 	//	- score: Call default constructor
 	//	- turn: Player1
 	//	- snake1_direction: Initially is North
+	//	- difficulty: NotInitialized
 	// Note: Spread out the objects so that they don't collide right away the game starts.
 	void setupSingle();
 
@@ -190,6 +199,7 @@ public:
 
 
 	// Main Game Loop:
+	//	- In SinglePlayerMode: User must set the difficulty: 1 = Easy, 2 = Intermediate, 3 = Hard (Then waits for space bar key to start)
 	//	- In StandBy mode, the game would not start until space bar has been pressed (Objects are displayed but does not move).
 	//	- In InProgress mode, the game would continue until an end condition is met
 	//	- In GameOver mode, the game stops running
@@ -215,7 +225,7 @@ public:
 
 	// Scoreboard Display:
 	//	- Pressing space bar switches to menu display
-	//	- (Testing purposes): For now, terminal interface is used
+	//	- Output depends on user's display option
 	void displayScoreboard();
 
 	// Change snake's direction:

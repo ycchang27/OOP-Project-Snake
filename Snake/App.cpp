@@ -107,9 +107,11 @@ void App::draw() {
 	// ========================================Yun's code uncomment after testing===============================================
 	switch (game.currentMode())
 	{
-	case Menu: game.displayMenu(); break;						// Display menu
-	case ScoreDisplay: game.displayScoreboard(); break;			// Display scoreboard
-	default: game.run(); break;									// Run/continue the game
+	case Menu: game.displayMenu(); break;																// Display menu
+	case ScoreDisplayEasy: game.displayScoreboard(); break;		// Display scoreboard
+	case ScoreDisplayInt: game.displayScoreboard(); break;		// Display scoreboard
+	case ScoreDisplayHard: game.displayScoreboard(); break;		// Display scoreboard
+	default: game.run(); break;																			// Run/continue the game
 	}
 	// check end condition
 	if (game.currentStatus() == GameOver)
