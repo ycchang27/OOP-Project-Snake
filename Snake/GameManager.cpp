@@ -76,11 +76,11 @@ void GameManager::setupSingle()
 	score = ScoreKeeper();
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
-	snake1 = Snake(0,0,0,1,0, loadTexture("../DIO.bmp"));
+	snake1 = Snake(0,0,0,1,0, loadTexture("../profile_single.bmp"));
 	fruit = Fruit(fx,fy,1,0,1); 
 	ScoreKeeper score;
 	Player Player1;
-	texture = loadTexture("../game.bmp");
+	texture = loadTexture("../gamedisplay_single.bmp");
 }
 
 void GameManager::setupTwoPlayer()
@@ -143,9 +143,10 @@ void GameManager::runSingle()
 		count = 0;
 		t = clock();
 	}
-	
-	snake1.draw();
-	// Display game background
+	snake1.draw();									// Display snake
+
+	// Display game background:
+	// Display score
 	glColor3d(0.0, 0.0, 0.0);						// Set the color
 	char c;
 	string line = "";
@@ -165,10 +166,19 @@ void GameManager::runSingle()
 		}
 	}
 	char* temp;
+	line = "Score: " + line;
 	temp = new char[line.size() + 1];
 	strcpy(temp, line.c_str());
-	output(0.3, -0.8, temp);
+	output(-0.4, -0.95, temp);
+
+	// Draw Boundary line (to separate between score and the game)
+	glBegin(GL_LINES);								// Start drawing
+	glVertex2f(-1, -0.8);
+	glVertex2f(1 , -0.8);
+	glEnd();										// Stop drawing
 	glColor3d(1.0, 1.0, 1.0);						// Set the color
+
+	// Draw the background
 	background.textureDraw(texture);
 }
 
