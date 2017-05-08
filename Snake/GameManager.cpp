@@ -360,9 +360,9 @@ void GameManager::end()
 {
 	if (mode == SinglePlayerMode)											// SinglePlayerMode ending
 	{
-		if (score.isTop10())
+		if (score.isTop10())	// in top 10 (high score)
 			receiveName();
-		else
+		else	// not in top 10 (no high score)
 		{
 			if (keyboard == 13)												// stops input when enter key is pressed (goes back to the menu)
 			{
@@ -388,10 +388,11 @@ void GameManager::end()
 						tempscore /= 10;
 					}
 				}
+				line = "Your Score: " + line;
 				char* temp = new char[line.size() + 1];
 				strcpy(temp, line.c_str());
 				glColor3d(0.0, 0.0, 0.0);									// Set the color
-				output(0.4, 0.1, temp);
+				output(-0.85, -0.45, temp);
 				delete temp;
 				output(-0.85, -0.6, "Enter key: return to menu");
 				glColor3d(1.0, 1.0, 1.0);									// Set the color
@@ -445,7 +446,7 @@ void GameManager::receiveName()
 	}
 	glColor3d(0.0, 0.0, 0.0);						// Set the color
 	// display UI
-	double startx = -0.95, starty = -0.1;				// determine where to start printing
+	double startx = -0.95, starty = 0.0;				// determine where to start printing
 	glLineWidth(2.0);									// line length = 2
 	startx = -0.95;
 	output(startx, starty, "Name:");
@@ -463,10 +464,9 @@ void GameManager::receiveName()
 	strcpy(temp, player_name.c_str());
 	output(startx, starty, temp);
 	delete temp;
-	starty = -0.6;
-	output(startx, starty, "Enter key: return to menu");
 
-	// display background
+	// paint the screen
+	// display score
 	char c;
 	string line = "";
 	int tempscore = score.getCurrentScore();
@@ -484,9 +484,11 @@ void GameManager::receiveName()
 			tempscore /= 10;
 		}
 	}
+	line = "Score: " + line;
 	temp = new char[line.size() + 1];
 	strcpy(temp, line.c_str());
-	output(0.4, 0.1, temp);
+	output(startx, starty - 0.15, temp);
+	output(startx, starty - 0.3, "Enter key: return to menu");
 	delete temp;
 	glColor3d(1.0, 1.0, 1.0);						// Set the color
 	texture = loadTexture("../gameover_highscore.bmp");
