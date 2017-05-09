@@ -139,7 +139,7 @@ void GameManager::runSingle()
 			fruit = Fruit((fx), (fy), 1, 0, 1);
 			score.increaseScore();
 			sound_effect->stopAllSounds();
-			sound_effect->play2D("../fruit_single.wav", false);
+			sound_effect->play2D("../fruit_single.mp3", false);
 		}
 
 
@@ -303,6 +303,7 @@ void GameManager::runAI()
 		}
 		else if (fruit.isThereCollision(snake1.getHead())) {
 			snake1.grow();
+			sound_effect->stopAllSounds();
 			sound_effect->play2D("../fruit_player1.mp3");
 			fruit = Fruit((fx), (fy), 1, 0, 1);
 		}
@@ -311,6 +312,7 @@ void GameManager::runAI()
 		if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false) && status != GameOver) {
 			//cout << "You win" << endl;
 			sound_effect->stopAllSounds();
+
 			sound_effect->play2D("../victory_player1.wav");
 			status = GameOver;
 			victory = Player1;
@@ -408,6 +410,8 @@ void GameManager::end()
 			{
 				mode = Menu;
 				status = StandBy;
+				background_music->play2D("../background.mp3", true);
+
 			}
 			else
 			{
@@ -447,6 +451,8 @@ void GameManager::end()
 		{
 			mode = Menu;
 			status = StandBy;
+			background_music->play2D("../background.mp3", true);
+
 		}
 		else
 		{
@@ -463,6 +469,8 @@ void GameManager::end()
 		{
 			mode = Menu;
 			status = StandBy;
+			background_music->play2D("../background.mp3", true);
+
 		}
 		else
 		{
@@ -478,6 +486,8 @@ void GameManager::end()
 		{
 			mode = Menu;
 			status = StandBy;
+			background_music->play2D("../background.mp3", true);
+
 		}
 		else
 		{
@@ -498,6 +508,8 @@ void GameManager::receiveName()
 	{
 		mode = Menu;
 		status = StandBy;
+		background_music->play2D("../background.mp3", true);
+
 		score.save(player_name, difficulty);
 		score.resetScore();
 		player_name.erase();
