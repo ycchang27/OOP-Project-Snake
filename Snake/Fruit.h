@@ -23,17 +23,21 @@ private:
 	// Color
 	double r, g, b;
 
+	GLuint texture;
+
 public:
 	// Constructors:
 	Fruit() {}			// does nothing (must call the other constructor)
 	
 	// Initialize the square (side is already defined)
-	Fruit(double x, double y, double r, double g, double b) 
+	Fruit(double x, double y, double r, double g, double b, GLuint fru) 
 	{
 		fruit = Square(x, y);
 		this -> r = r;
 		this -> g = g;
 		this -> b = b;
+
+		texture = fru;
 	}
 
 	// Public method:
@@ -41,7 +45,7 @@ public:
 	// Draw the fruit (just call the square's draw function)
 	void draw()
 	{
-		fruit.draw(r,g,b);
+		fruit.textureDraw(texture);
 	}
 
 	// check if fruit contains the square

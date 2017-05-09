@@ -85,8 +85,9 @@ void GameManager::setupSingle()
 	score.resetScore();
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
-	snake1 = Snake(0,0,0,1,0, loadTexture("../profile_single.bmp"));
-	fruit = Fruit(fx,fy,1,0,1); 
+	snake1 = Snake(0,0,0,1,0, loadTexture("../kakyoin.bmp"),loadTexture("../heirophantogreen.bmp"));
+	fruitTexture = loadTexture("../fruit_single.bmp");
+	fruit = Fruit(fx,fy,1,0,1,fruitTexture); 
 	turn = Player1;
 	texture = loadTexture("../difficulty_selection.bmp");
 	difficulty = NotInitialized;
@@ -98,9 +99,10 @@ void GameManager::setupTwoPlayer()
 
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
-	snake1 = Snake(0.5, 0.5, 1, 1, 0, loadTexture("../DIO.bmp"));
-	fruit = Fruit(fx, fy, 1, 0, 1);
-	snake2 = Snake(-0.5, -0.5, 0, 1, 0, loadTexture("../DIO.bmp"));
+	snake1 = Snake(0.5, 0.5, 1, 1, 0, loadTexture("../jotaro.bmp"), loadTexture("../chain.bmp"));
+	fruitTexture = loadTexture("../jonathanfruit.bmp");
+	fruit = Fruit(fx, fy, 1, 0, 1, fruitTexture);
+	snake2 = Snake(-0.5, -0.5, 0, 1, 0, loadTexture("../DIO.bmp"), loadTexture("../heart.bmp"));
 
 }
 
@@ -110,11 +112,11 @@ void GameManager::setupAI()
 
 	double fx = ((double)(rand() % 15 - 8) / 10);
 	double fy = ((double)(rand() % 15 - 7) / 10);
-	snake1 = Snake(0.5, 0.5, 0, 1, 1, loadTexture("../DIO.bmp"));
-	fruit = Fruit(fx, fy, 1, 0, 1);
-	snake2 = Snake(-0.5, -0.5, 1, 0, 0, loadTexture("../DIO.bmp"));
+	snake1 = Snake(0.5, 0.5, 0, 1, 1, loadTexture("../jotaro.bmp"), loadTexture("../chain.bmp"));
+	fruitTexture = loadTexture("../jonathanfruit.bmp");
+	fruit = Fruit(fx, fy, 1, 0, 1,fruitTexture);
+	snake2 = Snake(-0.5, -0.5, 1, 0, 0, loadTexture("../DIO.bmp"), loadTexture("../heart.bmp"));
 }
-
 void GameManager::runSingle()
 {
 	srand(time(NULL));
@@ -136,7 +138,7 @@ void GameManager::runSingle()
 		}
 		else if (fruit.isThereCollision(snake1.getHead())) {
 			snake1.grow();
-			fruit = Fruit((fx), (fy), 1, 0, 1);
+			fruit = Fruit((fx), (fy), 1, 0, 1,fruitTexture);
 			score.increaseScore();
 			sound_effect->stopAllSounds();
 			sound_effect->play2D("../fruit_single.mp3", false);
@@ -225,7 +227,7 @@ void GameManager::runTwoPlayer()
 				sound_effect->play2D("../fruit_player1.mp3");
 				snake1.grow();
 
-				fruit = Fruit((fx), (fy), 1, 0, 1);
+				fruit = Fruit((fx), (fy), 1, 0, 1,fruitTexture);
 			}
 			t = clock();
 
@@ -243,7 +245,7 @@ void GameManager::runTwoPlayer()
 				snake2.grow();
 				sound_effect->stopAllSounds();
 				sound_effect->play2D("../fruit_player2.wav");
-				fruit = Fruit((fx), (fy), 1, 0, 1);
+				fruit = Fruit((fx), (fy), 1, 0, 1,fruitTexture);
 			}
 		
 			count = 0;
@@ -305,7 +307,7 @@ void GameManager::runAI()
 			snake1.grow();
 			sound_effect->stopAllSounds();
 			sound_effect->play2D("../fruit_player1.mp3");
-			fruit = Fruit((fx), (fy), 1, 0, 1);
+			fruit = Fruit((fx), (fy), 1, 0, 1,fruitTexture);
 		}
 		t = clock();
 		
@@ -321,7 +323,7 @@ void GameManager::runAI()
 			snake2.grow();
 			sound_effect->stopAllSounds();
 			sound_effect->play2D("../fruit_player2.wav");
-			fruit = Fruit((fx), (fy), 1, 0, 1);
+			fruit = Fruit((fx), (fy), 1, 0, 1,fruitTexture);
 		}
 		t = clock();
 	}
