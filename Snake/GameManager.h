@@ -17,6 +17,17 @@
 #include <string>
 #include <iostream>
 
+// Sound Engine
+// Download page: http://www.ambiera.com/irrklang/downloads.html
+// Set up tutorial: http://www.dreamincode.net/forums/topic/185301-playing-audio-files-with-irrklang/
+#include <Windows.h>
+#include "include/irrKlang.h"
+
+// Set up for sound engine
+using namespace std;
+using namespace irrklang;
+#pragma comment(lib, "irrKlang.lib")
+
 class GameManager
 {
 private:
@@ -36,6 +47,10 @@ private:
 	// GameDifficulty
 	//	- Only used in SinglePlayerMode
 	GameDifficulty difficulty;
+
+	// Sound controls
+	ISoundEngine* sound_effect;
+	ISoundEngine* background_music;
 
 	// Game speed
 	//	- Only used in SinglePlayerMode
@@ -76,6 +91,7 @@ public:
 	//	- status: Initially on StandBy mode
 	//	- keyboard: Initially '\0'
 	//	- special_keyboard: Initially -1
+	//	- sounds: follow the irrKlang.h's example
 	GameManager();
 
 private:

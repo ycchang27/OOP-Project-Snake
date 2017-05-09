@@ -32,6 +32,14 @@ GameManager::GameManager()
 	t = clock();
 	background = Square(-1.0, 1.0);
 	background.setToBackgroundSize();
+
+	// Inititializing sound engine
+	sound_effect = createIrrKlangDevice();
+	if (!sound_effect)
+		cout << "Error: Sound effect could not be created" << endl;
+	background_music = createIrrKlangDevice();
+	if (!background_music)
+		cout << "Error: Background music could not be created" << endl;
 }
 
 void GameManager::AIDecision()
@@ -122,12 +130,15 @@ void GameManager::runSingle()
 		snake1.move(snake1.getDirection());
 
 		if (snake1.isThereCollision(snake1.getHead(), true)) {
+			sound_effect->stopAllSounds();
 			status = GameOver;
 		}
 		else if (fruit.isThereCollision(snake1.getHead())) {
 			snake1.grow();
 			fruit = Fruit((fx), (fy), 1, 0, 1);
 			score.increaseScore();
+			sound_effect->stopAllSounds();
+			sound_effect->play2D("../fruit_single.wav", false);
 		}
 
 
@@ -198,15 +209,19 @@ void GameManager::runTwoPlayer()
 	
 
 
-	if ((((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05) ) {
+	if ((((float)(clock() - t)) / CLOCKS_PER_SEC > 0.1) ) {
 		snake1.move(snake1.getDirection());
 
 			if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), false)) {
-				cout << "Player 2 wins" << endl;
-
+				//cout << "Player 2 wins" << endl;
+				sound_effect->stopAllSounds();
+				sound_effect->play2D("../victory_player2.mp3");
 				status = GameOver;
+				victory = Player2;
 			}
 			else if (fruit.isThereCollision(snake1.getHead())) {
+				sound_effect->stopAllSounds();
+				sound_effect->play2D("../fruit_player1.mp3");
 				snake1.grow();
 
 				fruit = Fruit((fx), (fy), 1, 0, 1);
@@ -217,13 +232,16 @@ void GameManager::runTwoPlayer()
 			snake2.move(snake2.getDirection());
 
 			if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false) && status != GameOver) {
-				cout << "Player 1 wins" << endl;
-
+				//cout << "Player 1 wins" << endl;
+				sound_effect->stopAllSounds();
+				sound_effect->play2D("../victory_player1.wav");
 				status = GameOver;
+				victory = Player1;
 			}
 			else if (fruit.isThereCollision(snake2.getHead())) {
 				snake2.grow();
-
+				sound_effect->stopAllSounds();
+				sound_effect->play2D("../fruit_player2.wav");
 				fruit = Fruit((fx), (fy), 1, 0, 1);
 			}
 		
@@ -236,6 +254,15 @@ void GameManager::runTwoPlayer()
 
 	snake1.draw();
 	snake2.draw();
+	// Draw Boundary line (to separate between score and the game)
+	glBegin(GL_LINES);								// Start drawing
+	glVertex2f(-1, -0.8);
+	glVertex2f(1, -0.8);
+	glEnd();										// Stop drawing
+
+													// Draw the background
+	glColor3d(1.0, 1.0, 1.0);						// Set the color
+	background.textureDraw(texture);
 }
 
 void GameManager::runAI()
@@ -254,9 +281,9 @@ void GameManager::runAI()
 
 	fruit.draw();
 
-	cout << rand_num;
+	//cout << rand_num;
 	
-	if ((((float)(clock() - t)) / CLOCKS_PER_SEC > 0.05)) {
+	if ((((float)(clock() - t)) / CLOCKS_PER_SEC > 0.1)) {
 		snake1.move(snake1.getDirection());
 
 		switch (rand_num)
@@ -268,32 +295,31 @@ void GameManager::runAI()
 		}
 
 		if (snake1.isThereCollision(snake1.getHead(), true) || snake2.isThereCollision(snake1.getHead(), false)) {
-			cout << "You lose" << endl;
 			status = GameOver;
+			victory = AI;
+			sound_effect->stopAllSounds();
+			sound_effect->play2D("../victory_player2.mp3");
 		}
 		else if (fruit.isThereCollision(snake1.getHead())) {
 			snake1.grow();
-
+			sound_effect->play2D("../fruit_player1.mp3");
 			fruit = Fruit((fx), (fy), 1, 0, 1);
-			
 		}
-
 		t = clock();
-
-	
-	
-
 		
 		if (snake2.isThereCollision(snake2.getHead(), true) || snake1.isThereCollision(snake2.getHead(), false) && status != GameOver) {
-			cout << "You win" << endl;
+			//cout << "You win" << endl;
+			sound_effect->stopAllSounds();
+			sound_effect->play2D("../victory_player1.wav");
 			status = GameOver;
+			victory = Player1;
 		}
 		else if (fruit.isThereCollision(snake2.getHead())) {
 			snake2.grow();
+			sound_effect->stopAllSounds();
+			sound_effect->play2D("../fruit_player2.wav");
 			fruit = Fruit((fx), (fy), 1, 0, 1);
-
 		}
-
 		t = clock();
 	}
 // code here...
@@ -303,6 +329,15 @@ void GameManager::runAI()
 
 	snake1.draw();
 	snake2.draw();
+	// Draw Boundary line (to separate between score and the game)
+	glBegin(GL_LINES);								// Start drawing
+	glVertex2f(-1, -0.8);
+	glVertex2f(1, -0.8);
+	glEnd();										// Stop drawing
+
+													// Draw the background
+	glColor3d(1.0, 1.0, 1.0);						// Set the color
+	background.textureDraw(texture);
 }
 
 void GameManager::run()
@@ -320,9 +355,9 @@ void GameManager::run()
 		}
 		switch (keyboard)
 		{
-		case '1': difficulty = Easy; texture = loadTexture("../gamedisplay_single.bmp"); game_speed = 0.10; break;
-		case '2': difficulty = Intermediate; texture = loadTexture("../gamedisplay_single.bmp"); game_speed = 0.05; break;
-		case '3': difficulty = Hard; texture = loadTexture("../gamedisplay_single.bmp"); game_speed = 0.025; break;
+		case '1': difficulty = Easy; game_speed = 0.10; break;
+		case '2': difficulty = Intermediate; game_speed = 0.05; break;
+		case '3': difficulty = Hard; game_speed = 0.025; break;
 		}
 		score = ScoreKeeper(difficulty);									// Set up the score keeper
 		resetInput();														// Reset user input
@@ -342,7 +377,10 @@ void GameManager::run()
 			return;
 		}
 		else
+		{
+			texture = loadTexture("../gamedisplay.bmp");
 			status = InProgress;												// Start the game
+		}
 	}
 
 	// Run/continue the game accordingly
@@ -403,24 +441,49 @@ void GameManager::end()
 	}
 	else if (victory == Player1)											// Player1's victory
 	{
-		mode = Menu;
-		status = StandBy;
-		cout << "Press any key to go to menu"<<endl;
-
-
+		if (keyboard == 13)													// stops input when enter key is pressed (goes back to the menu)
+		{
+			mode = Menu;
+			status = StandBy;
+		}
+		else
+		{
+			/*output(-0.85, -0.6, "Enter key: return to menu");*/
+			glColor3d(1.0, 1.0, 1.0);										// Set the color
+			texture = loadTexture("../victory_player1.bmp");
+			background.textureDraw(texture);
+		}
 	}
 	else if (victory == Player2)											// Player2's victory
 	{
-		mode = Menu;
-		status = StandBy;
-		cout << "Press any key to go to menu"<<endl;
-
+		//sound_effect->play2D("../victory_player2.mp3");
+		if (keyboard == 13)												// stops input when enter key is pressed (goes back to the menu)
+		{
+			mode = Menu;
+			status = StandBy;
+		}
+		else
+		{
+			/*output(-0.85, -0.6, "Enter key: return to menu");*/
+			glColor3d(1.0, 1.0, 1.0);									// Set the color
+			texture = loadTexture("../victory_player2.bmp");
+			background.textureDraw(texture);
+		}
 	}
 	else																	// AI's victory
 	{
-		mode = Menu;
-		status = StandBy;
-		cout << "Press any key to go to menu"<<endl;
+		if (keyboard == 13)												// stops input when enter key is pressed (goes back to the menu)
+		{
+			mode = Menu;
+			status = StandBy;
+		}
+		else
+		{
+			/*output(-0.85, -0.6, "Enter key: return to menu");*/
+			glColor3d(1.0, 1.0, 1.0);									// Set the color
+			texture = loadTexture("../victory_player2.bmp");
+			background.textureDraw(texture);
+		}
 
 	}
 	resetInput();															// Reset user input
