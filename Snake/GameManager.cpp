@@ -40,6 +40,7 @@ GameManager::GameManager()
 	background_music = createIrrKlangDevice();
 	if (!background_music)
 		cout << "Error: Background music could not be created" << endl;
+	background_music->play2D("../background.mp3", true);
 }
 
 void GameManager::AIDecision()
@@ -380,6 +381,7 @@ void GameManager::run()
 		{
 			texture = loadTexture("../gamedisplay.bmp");
 			status = InProgress;												// Start the game
+			background_music->stopAllSounds();
 		}
 	}
 
@@ -565,7 +567,7 @@ void GameManager::displayMenu()
 	// Display menu
 	texture = loadTexture("../menu.bmp");
 	background.textureDraw(texture);
-
+	
 	// Apply user response (not terminal)
 	switch (keyboard)
 	{
