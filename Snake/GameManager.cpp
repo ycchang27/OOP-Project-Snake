@@ -43,16 +43,6 @@ GameManager::GameManager()
 	background_music->play2D("../background.mp3", true);
 }
 
-void GameManager::AIDecision()
-{
-	// code here...
-}
-
-Collision GameManager::checkCollision(const Player player)
-{
-	// code here...
-	return NONE;
-}
 
 void GameManager::changeDirection()
 {
@@ -143,15 +133,6 @@ void GameManager::runSingle()
 			sound_effect->stopAllSounds();
 			sound_effect->play2D("../fruit_single.mp3", false);
 		}
-
-
-		/*if (woah.isThereCollision(snake1.getHead()))
-		{
-		snake1.grow();
-		}*/
-
-		//std::cout << "Snake is moving\n";
-
 
 		count = 0;
 		t = clock();

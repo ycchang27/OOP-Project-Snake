@@ -24,20 +24,6 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
     painting = new TexRect(0, 0.67, 0.5, 0.67);
 	stopMove = false;
 	
-	//woah = Fruit(0.1,0.5,1.0,0.0,0.0);
-	// TEST YOUR CODE HERE:
-	/*
-	test = Square(-0.05, 0.05);						// center
-	double temp_x = 0, temp_y = 0;
-	test.getLocation(temp_x, temp_y);
-	for (int i = 0; i <= 3; ++i)
-		tests.push_back(Square(temp_x, temp_y));	// surrounding squares
-	tests[0].move(North, 0.3);
-	tests[1].move(South, 0.3);
-	tests[2].move(West, 0.3);
-	tests[3].move(East, 0.3);
-	*/
-	
 
 
 	speed = 500;
@@ -49,18 +35,6 @@ App::App(const char* label, int x, int y, int w, int h): GlutApp(label, x, y, w,
 
 void App::idle() {
 	redraw();
-	
-	// Check whether it is the time to "run" or not
-	// ========================================Yun's code uncomment after testing===============================================
-	//if (game.currentStatus() == GameOver || game.currentStatus() == StandBy || game.currentMode() == Menu || game.currentMode() == ScoreDisplay)
-	//	return;
-	//else
-	//{
-	//	if(game.currentMode() == AIMode)			// AI feature: AI always makes decide to turn each "run" (can face the same direction as previous one)
-	//		game.AIDecision();
-	//	redraw();									// run
-	//}
-	// =========================================================================================================================
 	
 }
 
@@ -79,32 +53,7 @@ void App::draw() {
 
 	// TEST YOUR CODE HERE:
 	
-	//snake1.draw();
-	//woah.draw();
-
-		//cout << "here" << endl;
-// ======================================= David's test code, ignore ============================================
-	//if (count >= speed)
-	//{
-	//	if (!stopMove)
-	//	{
-	//		snake1.move(snake1.getDirection());
-	//		
-	//		/*if (woah.isThereCollision(snake1.getHead()))
-	//		{
-	//			snake1.grow();
-	//		}*/
-	//		snake1.isThereCollision(snake1.getHead(), true);
-	//		//std::cout << "Snake is moving\n";
-	//	}
-	//	
-	//	count = 0;
-	//}
-// =========================================================================================================================
-
-	// GameManager (Actual Run):
-	// game mode check
-	// ========================================Yun's code uncomment after testing===============================================
+	
 	switch (game.currentMode())
 	{
 	case Menu: game.displayMenu(); break;																// Display menu
@@ -116,26 +65,8 @@ void App::draw() {
 	// check end condition
 	if (game.currentStatus() == GameOver)
 		game.end();
-	// =========================================================================================================================
 	
-	// END TESTING
 
-	
-	// IGNORE THE FOLLOWING (Still being tested):
-	// Set Color
-	/*glColor3d(1.0, 1.0, 1.0);
-
-
-	glBindTexture( GL_TEXTURE_2D, monalisa );
-	painting->draw();
-*/
-/*
-	glBindTexture( GL_TEXTURE_2D, wall );
-	background->draw();
-
-
-	glDisable(GL_TEXTURE_2D);
-	*/
 	
 
     // We have been drawing everything to the back buffer
@@ -145,14 +76,7 @@ void App::draw() {
 }
 
 void App::keyPress(unsigned char key) {
-    //if (key == 27){
-    //    // Exit the app when Esc key is pressed
-    //    exit(0);
-    //}
-
-	/*if (key == 'x')
-		stopMove = !stopMove;*/
-// ========================================Yun's code uncomment after testing===============================================
+   
 	if (key == 27) // Exit the app when Esc key is pressed
 		exit(0);
 	else
@@ -161,23 +85,6 @@ void App::keyPress(unsigned char key) {
 		game.setTurn(Player1);
 		game.changeDirection();
 	}
-	redraw();
-// =========================================================================================================================
-
-
-	
-// ======================================= David's test code, ignore ============================================
-	//switch (key)
-	//{
-	//case 27: exit(0);
-	//case 'x': stopMove = !stopMove; break;
-	//case 'w': snake1.setDirection(North); break;
-	//case 'a': snake1.setDirection(West); break;
-	//case 'd': snake1.setDirection(East); break;
-	//case 's': snake1.setDirection(South); break;
-	////default: std::cout << "No support for this key\n";
-	//}
-// =========================================================================================================================
 
 	redraw();
 	

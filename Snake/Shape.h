@@ -14,9 +14,7 @@
 class Shape
 {
 protected:
-	// Accessible by all Shapes and its derived classes
-	// Provides distinguishable location of the shape
-	// For example, Square's point would represent the point at the top left corner
+	
 	double x, y;
 
 public:

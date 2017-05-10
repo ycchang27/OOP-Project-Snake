@@ -73,31 +73,7 @@ public:
 	ScoreKeeper()
 	{
 		current_score = 0;					// Set current score to 0
-		//file_reader.open("../score.txt");	// Attempt opening the file
-		//if (file_reader.is_open())
-		//{
-		//	string line;
-		//	unsigned int score;
-		//	char* temp;
-
-		//	// Start reading the file here...
-		//	while (file_reader.good())
-		//	{
-		//		// Get the score (string to char* conversion is needed for atoi)
-		//		getline(file_reader, line, '|');
-		//		temp = new char[line.size() + 1];
-		//		strcpy(temp, line.c_str());
-		//		score = atoi(temp);
-
-		//		// Get the player name
-		//		getline(file_reader, line, '|');
-		//		score_list.push_back(Score(score, line));
-		//	}
-		//	lowest_score = score;			// Set the lowest score
-		//	file_reader.close();			// Close the file
-		//}
-		//else
-		//	cout << "Error: File not found.\n";		// Print error message
+		
 	}
 	ScoreKeeper(GameDifficulty difficulty)
 	{

@@ -107,12 +107,7 @@ public:
 		bodyTexture = body;
 	}
 
-	// Public methods:
 
-	// Insert a square into the vector...
-	// First, get the location of the last square of the vector (size-1).
-	// Second, create a square offsetted by 0.1 from the last square (Make sure that
-	// the location is valid). Then, push back into the vector
 	void grow()
 	{
 		// code here...
@@ -144,28 +139,7 @@ public:
 		else if (yOffset < 0)
 			y += 0.1;
 		
-		/*if (x >= 1.0)
-		{
-			x -= 0.1;
-			y -= 0.1;
-		}
-		else if (x <= -1)
-		{
-			x += 0.1;
-			y -= 0.1;
-		}
-
-		if (y >= 1.0)
-		{
-			x -= 0.1;
-			y -= 0.1;
-		}
-		else if (y <= -1)
-		{
-			x += 0.1;
-			y += 0.1;
-		}*/
-		// check if location is valid first before putting in
+		
 		snake.push_back(Square(x, y));
 
 	//	cout << "Snake growing with (" << x << ", " << y << ")\n";
@@ -177,13 +151,7 @@ public:
 		}
 	}
 
-	// Move the snake by 0.1 in a specified direction...
-	// First, store the head's (index = 0) location (There is a method called getLocation(...)).
-	// Second, move the head to the new location and have its body/tail move to its 
-	// previous location (the coordinates that just got stored). Remember that there is
-	// a method that makes the head/body/tail move called move(...).
-	// Third, repeat this process until all snake parts have moved to the new location.
-	// Read Square.h for more details about the given methods.
+	
 	void move(Direction direction)
 	{
 		// code here...
@@ -208,18 +176,6 @@ public:
 		snake[0].move(myDirection, offset);
 		checkBounds();
 		snake[0].getLocation(newX, newY);
-
-	/*	cout << "Head Position (" << newX << ", " << newY << ")\n";
-		cout << "Offset = " << offset << "\n";
-		if (myDirection == East)
-			std::cout << "Direction = East\n";
-		else if (myDirection == West)
-			std::cout << "Direction = West\n";
-		else if (myDirection == North)
-			std::cout << "Direction = North\n";
-		else if (myDirection == South)
-			std::cout << "Direction = South\n";
-		std::cout << "---------------------------------------------------\n";*/
 
 		for (int i = 1; i < snake.size(); i++)
 		{
@@ -254,8 +210,7 @@ public:
 		changedDirection = true;
 	}
 	
-	// Traverse through the vector and see if any of them contains the square
-	// If it's the same snake, don't check the first index (since head == head)
+	
 	bool isThereCollision(Square checkMe, bool same_snake)
 	{
 		// code here...
