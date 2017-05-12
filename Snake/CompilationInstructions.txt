@@ -1,1 +1,0 @@
-To compile and execute the program, just load up the project. Then once project is loaded, the project can be executed normally in virtual studios by pressing the local windows debugger.
