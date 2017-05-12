@@ -80,7 +80,6 @@ private:
 	// Background
 	Square background;
 	GLuint texture;
-	GLuint fruitTexture;
 
 	// Player name
 	string player_name = "";

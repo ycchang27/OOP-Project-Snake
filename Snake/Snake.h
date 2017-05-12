@@ -31,8 +31,6 @@ private:
 
 	GLuint texture;
 
-	GLuint bodyTexture;
-
 	void checkBounds()
 	{
 		double x;
@@ -91,7 +89,7 @@ public:
 
 	// Insert 3 squares into the vector (head, body, and tail)
 	// The square has already-defined side length 0.1
-	Snake(double x, double y, double r, double g, double b, GLuint head, GLuint body)
+	Snake(double x, double y, double r, double g, double b, GLuint head)
 	{
 		// code here...
 		snake.push_back(Square(x,y));
@@ -104,7 +102,6 @@ public:
 		changedDirection = false;
 
 		texture = head;
-		bodyTexture = body;
 	}
 
 
@@ -247,7 +244,7 @@ public:
 	{
 		snake[0].textureDraw(texture);
 		for (int i = 1; i < snake.size(); i++)
-			snake[i].textureDraw(bodyTexture);
+			snake[i].draw(r, g, b);
 	}
 };
 
